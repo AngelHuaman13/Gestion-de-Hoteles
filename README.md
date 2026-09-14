@@ -210,8 +210,8 @@ Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más deta
 
 ## 📧 Contacto
 
-**Autor:** Tu Nombre  
-**Email:** tu.email@ejemplo.com  
+**Autor:** Angel Oscar Moscoso Huaman  
+**Email:** mangel.roben@gmail.com  
 **GitHub:** [@tuusuario](https://github.com/tuusuario)
 
 ---
