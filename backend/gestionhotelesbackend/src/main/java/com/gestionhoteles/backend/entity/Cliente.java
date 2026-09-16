@@ -29,6 +29,12 @@ public class Cliente {
     @Column(unique = true, length = 20)
     private String cedula;
 
+    @Column(unique = true, length = 15)
+    private String dni;
+
+    @Column(name = "fecha_nacimiento")
+    private LocalDate fechaNacimiento;
+
     @Column(name = "fecha_registro", updatable = false)
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 }
