@@ -21,6 +21,10 @@ public class HabitacionService {
         return habitacionRepository.findById(id);
     }
 
+    public List<Habitacion> obtenerPorEstado(String estado) {
+    return habitacionRepository.findByEstado(estado);
+    }
+
     public Habitacion crear(Habitacion habitacion) {
         return habitacionRepository.save(habitacion);
     }
