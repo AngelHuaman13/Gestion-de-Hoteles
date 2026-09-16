@@ -31,6 +31,7 @@ public class HabitacionService {
             hab.setTipo(habitacionActualizada.getTipo());
             hab.setPrecioNoche(habitacionActualizada.getPrecioNoche());
             hab.setEstado(habitacionActualizada.getEstado());
+            hab.setCapacidad(habitacionActualizada.getCapacidad());
             return habitacionRepository.save(hab);
         }).orElse(null);
     }
