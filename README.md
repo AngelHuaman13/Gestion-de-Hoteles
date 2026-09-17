@@ -30,6 +30,8 @@ Esta aplicación proporciona una solución integral para la administración de h
 ### Entidades principales
 - **HotelController.java** → [Ver Gist](https://gist.github.com/Ashi-Games/0990f54d637def1173ef1e2202d880dc) (Ashi-Games)
 - **EntityHotel.java** → [Ver Gist](https://gist.github.com/Alex-cyber26/3d5a25f28b23b5bd3c9419bf6d2ad777) (Alex-cyber26)
+- **Habitacion.java** → [Ver Gist](https://gist.github.com/lufer-s/645283ce59619558fa18187c36f097a2) (lufer-s)
+- **HabitacionService.java** → [Ver Gist](https://gist.github.com/lufer-s/b7f59a26a22dea540a2f1fd88eb62027) (lufer-s)
 
 ---
 
