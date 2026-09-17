@@ -33,6 +33,12 @@ public class Reserva {
     @Column(name = "fecha_salida", nullable = false)
     private LocalDate fechaSalida;
 
+    @Column(name = "numero_personas")
+    private Integer numeroPersonas = 1;
+
+    @Column(name = "metodo_pago", length = 30)
+    private String metodoPago;
+
     @Column(length = 20)
     private String estado = "activa";
 

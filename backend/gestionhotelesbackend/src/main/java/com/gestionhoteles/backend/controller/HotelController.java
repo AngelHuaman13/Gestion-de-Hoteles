@@ -5,6 +5,7 @@ import com.gestionhoteles.backend.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -37,13 +38,21 @@ public class HotelController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Hotel> actualizar(@PathVariable Integer id, @RequestBody Hotel hotel) {
+    public ResponseEntity<Hotel> actualizar(
+            @PathVariable Integer id,
+            @RequestBody Hotel hotel) {
+
         Hotel actualizado = hotelService.actualizar(id, hotel);
-        return actualizado != null ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
+
+        return actualizado != null
+                ? ResponseEntity.ok(actualizado)
+                : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
-        return hotelService.eliminar(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        return hotelService.eliminar(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

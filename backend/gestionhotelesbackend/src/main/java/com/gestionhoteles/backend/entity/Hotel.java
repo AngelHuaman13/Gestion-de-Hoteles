@@ -35,6 +35,9 @@ public class Hotel {
     @Column(length = 100)
     private String email;
 
+    @Column(length = 255)
+    private String descripcion;
+
     @Column
     private Integer estrellas = 3;
 

@@ -13,6 +13,28 @@ Esta aplicación proporciona una solución integral para la administración de h
 
 ---
 
+## 👥 Equipo de Desarrollo
+
+| Integrante | GitHub | Rol |
+|-----------|--------|-----|
+| **Angel Huaman** | [@AngelHuaman13](https://github.com/AngelHuaman13) | Líder del Proyecto |
+| **Alex Cyber** | [@Alex-cyber26](https://github.com/Alex-cyber26) | Backend (Merges, Ramas) |
+| **Ashi Games** | [@Ashi-Games](https://github.com/Ashi-Games) | Backend (Tags, Features) |
+| **Diego (Diemox)** | [@Diemox](https://github.com/Diemox) | Backend (Releases, Issues) |
+| **Lufer** | [@lufer-s](https://github.com/lufer-s) | Backend (Branches, Releases) |
+
+---
+
+## 📚 Código Compartido (Gists)
+
+### Entidades principales
+- **HotelController.java** → [Ver Gist](https://gist.github.com/Ashi-Games/0990f54d637def1173ef1e2202d880dc) (Ashi-Games)
+- **EntityHotel.java** → [Ver Gist](https://gist.github.com/Alex-cyber26/3d5a25f28b23b5bd3c9419bf6d2ad777) (Alex-cyber26)
+- **Habitacion.java** → [Ver Gist](https://gist.github.com/lufer-s/645283ce59619558fa18187c36f097a2) (lufer-s)
+- **HabitacionService.java** → [Ver Gist](https://gist.github.com/lufer-s/b7f59a26a22dea540a2f1fd88eb62027) (lufer-s)
+
+---
+
 ## 🛠️ Tecnologías Utilizadas
 
 ### Backend
@@ -21,7 +43,6 @@ Esta aplicación proporciona una solución integral para la administración de h
 - **Spring Data JPA** - Persistencia de datos
 - **Spring Security** - Autenticación y autorización
 - **Spring MVC** - Controladores REST
-- **MySQL 8.0** - Base de datos
 
 ### Frontend
 - HTML5
@@ -51,13 +72,6 @@ Las dependencias que usaremos en `pom.xml`:
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-
-<!-- MySQL Connector -->
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.33</version>
 </dependency>
 
 <!-- Spring Security -->
@@ -96,11 +110,6 @@ Antes de comenzar, asegúrate de tener instalado:
   mvn -version
   ```
 
-- **MySQL 8.0**
-  ```bash
-  mysql --version
-  ```
-
 - **Git**
   ```bash
   git --version
@@ -112,34 +121,16 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tuusuario/Gestion-de-Hoteles.git
+git clone https://github.com/AngelHuaman13/Gestion-de-Hoteles.git
 cd Gestion-de-Hoteles
 ```
 
-### 2. Crear base de datos
-```sql
-CREATE DATABASE gestion_hoteles;
-USE gestion_hoteles;
-```
-
-### 3. Configurar la conexión a BD
-Edita el archivo `application.properties` o `application.yml`:
-
-```properties
-# application.properties
-spring.datasource.url=jdbc:mysql://localhost:3306/gestion_hoteles
-spring.datasource.username=root
-spring.datasource.password=tucontraseña
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-```
-
-### 4. Instalar dependencias
+### 2. Instalar dependencias
 ```bash
 mvn clean install
 ```
 
-### 5. Ejecutar la aplicación
+### 3. Ejecutar la aplicación
 ```bash
 mvn spring-boot:run
 ```
@@ -173,22 +164,36 @@ Gestion-de-Hoteles/
 
 ---
 
-## 🚀 Uso
+## 🚀 Endpoints principales
 
-### Endpoints principales
-
-#### Habitaciones
+### Habitaciones
 - `GET /api/habitaciones` - Obtener todas las habitaciones
 - `POST /api/habitaciones` - Crear nueva habitación
 - `GET /api/habitaciones/{id}` - Obtener habitación por ID
 - `PUT /api/habitaciones/{id}` - Actualizar habitación
 - `DELETE /api/habitaciones/{id}` - Eliminar habitación
 
-#### Reservas
+### Reservas
 - `GET /api/reservas` - Obtener todas las reservas
 - `POST /api/reservas` - Crear nueva reserva
 - `GET /api/reservas/{id}` - Obtener reserva por ID
 - `PUT /api/reservas/{id}` - Actualizar reserva
+
+---
+
+## 📚 Fases del Proyecto
+
+### ✅ Fase 1 (Completada)
+- Git workflow (branches, commits, merges, tags, releases)
+- GitHub Projects (Road Map + Kanban)
+- Estructura base del proyecto
+- Integrantes asignados
+
+### 📋 Fase 2 (Próximo Avance)
+- Configuración de Base de Datos MySQL
+- Entidades JPA completas
+- Repositorios y Services
+- Endpoints REST funcionales
 
 ---
 
@@ -210,9 +215,8 @@ Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más deta
 
 ## 📧 Contacto
 
-**Autor:** Angel Oscar Moscoso Huaman  
-**Email:** mangel.roben@gmail.com  
-**GitHub:** [@tuusuario](https://github.com/tuusuario)
+**Líder del Proyecto:** Angel Oscar Moscoso Huaman  
+**GitHub:** [@AngelHuaman13](https://github.com/AngelHuaman13)
 
 ---
 
@@ -220,8 +224,8 @@ Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más deta
 
 - [Documentación Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-- [MySQL Documentation](https://dev.mysql.com/doc/)
 - [RESTful API Design](https://restfulapi.net/)
+- [Git Workflow](https://git-scm.com/)
 
 ---
 
