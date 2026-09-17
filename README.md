@@ -28,8 +28,8 @@ Esta aplicación proporciona una solución integral para la administración de h
 ## 📚 Código Compartido (Gists)
 
 ### Entidades principales
-- **EntityHotel.java** → [Ver Gist](https://gist.github.com/Ashi-Games/0990f54d637def1173ef1e2202d880dc) (Ashi-Games)
-- **HotelController.java** → [Ver Gist](https://gist.github.com/Alex-cyber26/3d5a25f28b23b5bd3c9419bf6d2ad777) (Alex-cyber26)
+- **HotelController.java** → [Ver Gist](https://gist.github.com/Ashi-Games/0990f54d637def1173ef1e2202d880dc) (Ashi-Games)
+- **EntityHotel.java** → [Ver Gist](https://gist.github.com/Alex-cyber26/3d5a25f28b23b5bd3c9419bf6d2ad777) (Alex-cyber26)
 
 ---
 
