@@ -23,6 +23,7 @@ CREATE TABLE habitaciones (
                               id_hotel INT NOT NULL,
                               numero_habitacion VARCHAR(10) NOT NULL,
                               tipo VARCHAR(50), -- "Simple", "Doble", "Suite"
+                              capacidad INT NOT NULL,
                               precio_noche DECIMAL(10, 2),
                               estado VARCHAR(20) DEFAULT 'disponible', -- "disponible", "ocupada", "mantenimiento"
                               fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

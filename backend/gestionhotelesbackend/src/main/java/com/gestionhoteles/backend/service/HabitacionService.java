@@ -21,6 +21,10 @@ public class HabitacionService {
         return habitacionRepository.findById(id);
     }
 
+    public List<Habitacion> obtenerPorEstado(String estado) {
+    return habitacionRepository.findByEstado(estado);
+    }
+
     public Habitacion crear(Habitacion habitacion) {
         return habitacionRepository.save(habitacion);
     }
@@ -31,6 +35,7 @@ public class HabitacionService {
             hab.setTipo(habitacionActualizada.getTipo());
             hab.setPrecioNoche(habitacionActualizada.getPrecioNoche());
             hab.setEstado(habitacionActualizada.getEstado());
+            hab.setCapacidad(habitacionActualizada.getCapacidad());
             return habitacionRepository.save(hab);
         }).orElse(null);
     }
