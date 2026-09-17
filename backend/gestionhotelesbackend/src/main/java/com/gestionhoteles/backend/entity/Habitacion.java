@@ -34,6 +34,9 @@ public class Habitacion {
     @Column(length = 20)
     private String estado = "disponible";
 
+    @Column(nullable = false)
+    private Integer capacidad;
+
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();
 }
