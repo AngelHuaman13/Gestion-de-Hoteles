@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!--
+  xmlns:th="http://www.thymeleaf.org"
+  → Habilita el procesamiento de etiquetas "th:*" en el HTML.
+    Sin esto, Thymeleaf ignora todas las directivas.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habitaciones - Lotus Admin</title>
+
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons (CDN) → íconos para el menú y la tabla -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts → Inter (fuente principal del panel) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!--
+      th:href="@{/css/admin-habitaciones.css}"
+      → Ruta dinámica al archivo CSS específico de esta página.
+        "@{...}" es la sintaxis de Thymeleaf para URLs absolutas.
+    -->
+    <link th:href="@{/css/admin-habitaciones.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ============================================================
+     SIDEBAR (BARRA LATERAL)
+     ============================================================ -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <h2>Royal Sayariy</h2>
+        <span>Panel administrativo</span>
+    </div>
+
+    <!-- Menú de navegación -->
+    <div class="menu">
+
+        <!--
+          th:href="@{/admin/dashboard}"
+          → Enlace al dashboard del admin.
+        -->
+        <a th:href="@{/admin/dashboard}">
+            <i class="bi bi-grid-fill"></i>
+            Dashboard
+        </a>
+
+        <a th:href="@{/admin/reservas}">
+            <i class="bi bi-calendar-check-fill"></i>
+            Reservas
+        </a>
+
+        <!--
+          class="active" → resalta la opción actual en el sidebar.
+            Como estamos en la página de habitaciones, este enlace
+            tiene la clase "active" para marcarlo visualmente.
+        -->
+        <a th:href="@{/admin/habitaciones}" class="active">
+            <i class="bi bi-door-open-fill"></i>
+            Habitaciones
+        </a>
+
+        <a th:href="@{/admin/clientes}">
+            <i class="bi bi-people-fill"></i>
+            Clientes
+        </a>
+
+        <a th:href="@{/admin/flujo-caja}">
+            <i class="bi bi-cash-stack"></i>
+            Flujo de Caja
+        </a>
+
+    </div>
+
+    <!--
+      th:href="@{/logout}" → cierra la sesión del admin.
+    -->
+    <div class="logout">
+        <a th:href="@{/logout}">
+            <i class="bi bi-box-arrow-left"></i>
+            Cerrar Sesión
+        </a>
+    </div>
+
+</aside>
+
+<!-- ============================================================
+     CONTENIDO PRINCIPAL
+     ============================================================ -->
+<main class="main-content">
+
+    <!--
+      FLASH MESSAGES (success / error / warning)
+    -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-1"></i> <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i> <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${warning}" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-circle-fill me-1"></i> <span th:text="${warning}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!--
+      EMPTY STATE (ESTADO VACÍO)
+      th:if="${#lists.isEmpty(habitaciones)}"
+      → Muestra este mensaje solo si la lista "habitaciones" está vacía.
+        "#lists.isEmpty(...)" es un utility object de Thymeleaf
+        que verifica si una colección está vacía.
+    -->
+    <div class="empty-state"
+         th:if="${#lists.isEmpty(habitaciones)}">
+
+        <i class="bi bi-house-door-fill"></i>
+        <h3>No existen habitaciones registradas</h3>
+        <p>El sistema aún no tiene habitaciones configuradas.</p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3 px-3">
+        <input type="text" id="buscarInput" class="form-control flex-fill"
+               placeholder="Buscar habitación..." onkeyup="filtrarTabla()">
+        <a th:href="@{/admin/habitacion/nuevo}" class="btn btn-add">
+            <i class="bi bi-plus-lg"></i> Nueva Habitación
+        </a>
+    </div>
+
+    <!--
+      TABLA DE HABITACIONES
+      th:if="${not #lists.isEmpty(habitaciones)}"
+      → La tabla solo se renderiza si hay habitaciones en la lista.
+    -->
+    <div class="table-card"
+         th:if="${not #lists.isEmpty(habitaciones)}">
+
+        <div class="table-responsive">
+
+            <table class="table custom-table align-middle">
+
+                <!-- Encabezados fijos de la tabla -->
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Habitación</th>
+                    <th>Precio</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <!--
+                  th:each="hab : ${habitaciones}"
+                  → Itera sobre la lista "habitaciones" enviada desde
+                    AdminController.java. Por cada elemento crea una
+                    variable "hab" y genera una fila <tr>.
+
+                  th:text="'#' + ${hab.id}"
+                  → Concatena el símbolo "#" con el ID de la habitación.
+                    Ejemplo: "#1", "#2", etc.
+
+                  th:text="${hab.tipo}"
+                  → Muestra el tipo de habitación (Individual, Doble, Suite...).
+
+                  th:text="${hab.precio}"
+                  → Muestra el precio por noche.
+
+                  th:text="${hab.descripcion}"
+                  → Muestra la descripción de la habitación.
+                -->
+                <tr th:each="hab : ${habitaciones}">
+
+                    <!-- ID -->
+                    <td>
+                        <span class="fw-bold text-secondary"
+                              th:text="'#' + ${hab.id}">
+                            #1
+                        </span>
+                    </td>
+
+                    <!-- NOMBRE / TIPO -->
+                    <td>
+                        <div class="room-type"
+                             th:text="${hab.tipo}">
+                            Suite Premium
+                        </div>
+                    </td>
+
+                    <!-- PRECIO -->
+                    <td>
+                        <span class="price">
+                            S/ <span th:text="${hab.precio}">0.00</span>
+                        </span>
+                    </td>
+
+                    <!-- DESCRIPCIÓN -->
+                    <td>
+                        <div class="description"
+                             th:text="${hab.descripcion}">
+                            Descripción de habitación
+                        </div>
+                    </td>
+
+                    <!-- ESTADO (ocupada / disponible / no disponible) -->
+                    <td>
+
+                        <!--
+                          th:if="${idsOcupadas.contains(hab.id)}"
+                          → Verifica si el ID de la habitación está en la lista
+                            de habitaciones con reservas activas hoy.
+                            idsOcupadas se envía desde AdminController.
+                        -->
+                        <span th:if="${idsOcupadas.contains(hab.id)}"
+                              class="status-badge status-occupied">
+                            <i class="bi bi-clock-fill"></i>
+                            Ocupada
+                        </span>
+
+                        <!--
+                          th:if="${!idsOcupadas.contains(hab.id) and hab.disponible}"
+                          → Sin reserva activa y marcada como disponible en el sistema.
+                        -->
+                        <span th:if="${!idsOcupadas.contains(hab.id) and hab.disponible}"
+                              class="status-badge status-available">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Disponible
+                        </span>
+
+                        <!--
+                          th:if="${!idsOcupadas.contains(hab.id) and !hab.disponible}"
+                          → Sin reserva activa pero marcada como no disponible por el admin.
+                        -->
+                        <span th:if="${!idsOcupadas.contains(hab.id) and !hab.disponible}"
+                              class="status-badge status-unavailable">
+                            <i class="bi bi-x-circle-fill"></i>
+                            No Disponible
+                        </span>
+
+                    </td>
+
+                    <!-- ACCIONES -->
+                    <td>
+                        <div class="action-btns">
+                            <a th:href="@{/admin/habitacion/editar/{id}(id=${hab.id})}"
+                               class="btn-action btn-edit" title="Editar">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <button type="button"
+                                    class="btn-action btn-delete"
+                                    title="Eliminar"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    th:data-id="${hab.id}"
+                                    th:data-tipo="${hab.tipo}">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </div>
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;border:none;box-shadow:0 10px 40px rgba(0,0,0,0.12);">
+            <div class="modal-body text-center p-4">
+                <div style="font-size:3rem;color:#dc3545;margin-bottom:12px;">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <h5 style="font-weight:700;color:var(--chalet-text);margin-bottom:8px;">
+                    Eliminar Habitación
+                </h5>
+                <p style="color:#6b7280;margin-bottom:4px;font-size:0.95rem;">
+                    ¿Está seguro de eliminar la habitación
+                </p>
+                <p style="color:var(--chalet-brown);font-weight:700;font-size:1.1rem;margin-bottom:20px;">
+                    "<span id="deleteRoomName"></span>"?
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a id="confirmDeleteBtn" href="#"
+                       class="btn btn-danger"
+                       style="border-radius:14px;padding:10px 28px;font-weight:700;border:none;">
+                        <i class="bi bi-trash-fill me-1"></i> Eliminar
+                    </a>
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            style="border-radius:14px;padding:10px 28px;font-weight:600;border:none;">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const deleteModal = document.getElementById('deleteModal');
+if (deleteModal) {
+    deleteModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-id');
+        const tipo = button.getAttribute('data-tipo');
+        document.getElementById('deleteRoomName').textContent = tipo + ' #' + id;
+        document.getElementById('confirmDeleteBtn').href = '/admin/habitacion/eliminar/' + id;
+    });
+}
+
+function filtrarTabla() {
+    const input = document.getElementById('buscarInput').value.toLowerCase();
+    document.querySelectorAll('.table-card tbody tr').forEach(fila => {
+        fila.style.display = fila.textContent.toLowerCase().includes(input) ? '' : 'none';
+    });
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

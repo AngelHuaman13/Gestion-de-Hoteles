@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestionHoteles - Inicio</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+	    
+	    <link rel="preconnect" href="https://fonts.googleapis.com">
+	    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+		
+    <!-- Estilos personalizados -->
+    <link th:href="@{/css/navbar.css}" rel="stylesheet">
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+		
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Barra de navegación -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    
+
+	    <!-- Hero -->
+
+	    <!-- 
+	    container-fluid : significa que ocupara todo el ancho de pantalla
+	    contenedorHover : Estilo propio en el css
+	    contenedorTitle : Estilo propio en el css
+	    -->
+
+	    <div class="container-fluid contenedorHover">
+
+	        <div class="contenedorTitle">
+
+	            <h1>Experimente una comodidad inigualable.</h1>
+	            
+	        </div>
+
+	        <p>Haz que tu estancia sea inolvidable con la combinación perfecta de variedad y confort diseñada para una relajación total.</p>
+	        
+	    </div>
+
+
+	    <!-- 
+	    ====Seccion de features====
+	    container : ofrece un ancho adaptable,según el tamaño de la pantalla 
+	    -->
+
+	     <div class="container">
+
+	        <h3 class="text-center mt-3">Nuestros servicios</h3>
+	        
+	        <!--
+	        row : agrupa columnas y las organiza horizontalmente
+	        g-3: permite la separacion entre los div "hijos"
+	        -->
+	        <div class="row g-3 mt-3">          
+
+	            <!--
+	            col : ayuda a definir columnas responsive
+	            col-12 : significa que para pantallas con un ancho menor de 576px, ocupara el total del ancho del contenedor padre
+	            col-md-6 : significa que para pantallas con un ancho de 768px o más, ocupara la mitad del ancho del contenedor padre
+	            col-lg-3 : significa que para pantallas con un ancho de 992px o más, ocupara la tercera parte del ancho del contenedor padre
+	            -->
+
+	            <div class="col-12 col-md-6 col-lg-3" >
+	                
+	                <!--
+	                card : contendor flexible con estilos predefinidos, como padding interno y borde
+	                h-100 : es equivalente a decir heigth 100%, colocado con el fin para que todos midan los mismo
+	                text-center : Permite centrar todo el contenido de la card
+	                -->
+	                
+	                <div class="card h-100 text-center">    
+
+						
+						
+	                    <img  th:src = "@{/img/serviceRoom.jpg}" class="card-img-top" alt="...">
+	                    <div class="card-body">
+	                      <h5 class="card-title">Servicio de habitaciones</h5>
+	                      <p class="card-text">Disfruta del máximo confort sin salir de tu habitación. Te llevamos lo que necesites, rápido y directo a tu puerta.</p>
+	                    </div>
+	                </div>
+
+	            </div>          
+
+	            <div class="col-12 col-md-6 col-lg-3" >
+	                <div class="card h-100" >
+	                    <img th:src = "@{/img/LagugageStore.webp}" class="card-img-top object-fit-cover" alt="..." height="200">
+	                    <div class="card-body">
+	                      <h5 class="card-title">Servicio de equipaciones</h5>
+	                      <p class="card-text">Guarda tu equipaje de forma segura mientras disfrutas tu estadía sin preocupaciones.</p>
+	                      
+	                    </div>
+	                </div>
+	            </div>          
+	            
+	            <div class="col-12 col-md-6 col-lg-3" >
+	                <div class="card h-100" >
+	                    <img th:src = "@{/img/HotelComfort.jpg}" class="card-img-top" alt="..." >
+	                    <div class="card-body">
+	                      <h5 class="card-title">Habitaciones comodas</h5>
+	                      <p class="card-text">Relájate en espacios diseñados para tu descanso, con camas cómodas y un ambiente acogedor que te hará sentir como en casa.</p>
+	                      
+	                    </div>
+	                </div>
+	            </div>          
+
+	            <div class="col-12 col-md-6 col-lg-3" >
+	                <div class="card h-100" >
+	                    <img th:src = "@{/img/reception24Hrs.webp}" class="card-img-top" alt="...">
+	                    <div class="card-body">
+	                      <h5 class="card-title">Atencion las 24 horas</h5>
+	                      <p class="card-text">Estamos disponibles en todo momento para atender tus necesidades y brindarte una estadía cómoda y segura.</p>
+	                      
+	                    </div>
+	                </div>
+	            </div>
+
+	        </div>
+	    </div>
+
+
+
+	        <!--
+	    ==== SECCIÓN: TABLA DE COMPARACIÓN DE HABITACIONES ====
+	    container: centra el contenido y aplica márgenes verticales (mt-5 mb-5)
+	    text-center: centra el título
+	    table-responsive: permite scroll horizontal en pantallas pequeñas
+	    table: estilos base de Bootstrap para tablas
+	    align-middle: centra verticalmente el contenido de las celdas
+	    -->
+
+	    <div class="container mt-5 mb-5">
+
+	        <!-- Título de la sección -->
+	        <div class="text-center">
+	            <h2 class="section-title">Comparativa de Habitaciones</h2>
+	        </div>
+
+	        <!-- Contenedor responsive para la tabla -->
+	        <div class="table-responsive">
+
+	            <table class="table table-chalet text-center align-middle">
+
+	                <!-- Encabezado de la tabla -->
+	                <thead>
+	                    <tr>
+	                        <th class="text-start">Tipo de Habitación</th>
+	                        <th>Capacidad</th>
+	                        <th>Cama</th>
+	                        <th>Tamaño</th>
+	                        <th>Precio</th>
+	                        
+	                    </tr>
+	                </thead>
+
+	                <!-- Cuerpo de la tabla con los datos -->
+	                <tbody>
+
+	                    <!-- Fila: Habitación Estándar -->
+	                    <tr>
+	                        <td class="text-start room-name">Estándar</td>
+	                        <td>2 Personas</td>
+	                        <td>1 Queen</td>
+	                        <td>25 m²</td>
+	                        <td>s/ 108 x noche</td>
+	                        
+	                    </tr>
+
+	                    <!-- Fila: Deluxe -->
+	                    <tr>
+	                        <td class="text-start room-name">Deluxe Chalet</td>
+	                        <td>2 Personas</td>
+	                        <td>1 King + 1 Sofá</td>
+	                        <td>40 m²</td>
+	                        <td>s/ 216 x noche</td>
+	                        
+	                    </tr>
+
+	                    <!-- Fila: Familiar -->
+	                    <tr>
+	                        <td class="text-start room-name">Familiar</td>
+	                        <td>4 Personas</td>
+	                        <td>2 Queen + 1 Sofá</td>
+	                        <td>50 m²</td>
+	                        <td>s/ 440 x noche</td>
+	                        
+	                    </tr>
+
+	                    <!-- Fila: Suite Presidencial -->
+	                    <tr>
+	                        <td class="text-start room-name">Suite Presidencial</td>
+	                        <td>4 Personas</td>
+	                        <td>2 King + 1 sala</td>
+	                        <td>80 m²</td>
+	                        <td>s/ 800 x noche</td>
+	                        
+	                    </tr>
+
+	                </tbody>
+	            </table>
+
+	        </div>
+	    </div>
+
+	        <!--
+	    ==== MODAL: RESERVA DE HABITACIÓN ====
+	    modal: componente de Bootstrap para ventanas emergentes
+	    fade: animación de aparición/desaparición
+	    tabindex="-1": evita que el modal reciba foco al cargar
+	    aria-hidden="true": accesibilidad (oculto por defecto)
+	    -->
+
+	    <div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
+
+	        <!-- Centrado vertical del modal -->
+	        <div class="modal-dialog modal-dialog-centered">
+
+	            <div class="modal-content">
+
+	                <!-- Encabezado del modal -->
+	                <div class="modal-header modal-header-chalet">
+
+	                    <!-- Título dinámico con el nombre de la habitación -->
+	                    <h5 class="modal-title">
+	                        Reservar <span id="nombreHabitacionModal"></span>
+	                    </h5>
+
+	                    <!-- Botón para cerrar el modal -->
+	                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+	                </div>
+
+	                <!-- Cuerpo del modal -->
+	                <div class="modal-body p-4">
+
+	                    <!--
+	                    PASO 1: Selección de fecha
+	                    input type="date": selector de fecha
+	                    min / max: restringe el rango de fechas disponibles
+	                    -->
+	                    <div id="pasoFecha">
+
+	                        <label for="fechaReserva" class="form-label fw-bold">
+	                            Seleccione la fecha de llegada:
+	                        </label>
+
+	                        <input type="date"
+	                            id="fechaReserva"
+	                            class="form-control mb-3"
+	                            min="2026-04-12"
+	                            max="2026-12-31">
+
+	                        <button id="btnAceptarFecha" class="btn-chalet w-100">
+	                            Aceptar Fecha
+	                        </button>
+
+	                    </div>
+
+	                    <!--
+	                    PASO 2: Selección de días de estadía
+	                    inicialmente oculto (display: none)
+	                    -->
+	                    <div id="pasoDias" style="display: none;">
+
+	                        <label for="diasReserva" class="form-label fw-bold">
+	                            ¿Cuántos días se hospedará?
+	                        </label>
+
+	                        <input type="number"
+	                            id="diasReserva"
+	                            class="form-control mb-3"
+	                            min="1"
+	                            max="7"
+	                            value="1">
+
+	                        <small class="text-muted d-block mb-3">
+	                            Máximo 7 días permitidos.
+	                        </small>
+
+	                        <button id="btnConfirmarReserva" class="btn-chalet w-100">
+	                            Confirmar Reserva
+	                        </button>
+
+	                    </div>
+
+	                    <!--
+	                    PASO 3: Mensaje de éxito
+	                    se muestra al finalizar la reserva
+	                    -->
+	                    <div id="pasoExito" style="display: none;" class="text-center py-3">
+
+	                        <!-- Ícono de confirmación -->
+	                        <svg xmlns="http://www.w3.org/2000/svg"
+	                            width="50"
+	                            height="50"
+	                            fill="var(--chalet-brown)"
+	                            class="bi bi-check-circle mb-3"
+	                            viewBox="0 0 16 16">
+
+	                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+	                            <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+
+	                        </svg>
+
+	                        <!-- Mensaje final dinámico -->
+	                        <h5 id="mensajeFinal" style="color: var(--chalet-brown);"></h5>
+
+	                    </div>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+
+
+
+	    <!-- 
+	    ==== Uso de img-fluid ====
+	    container : ofrece un ancho adaptable,según el tamaño de la pantalla 
+	    -->
+
+	    <div class="container">
+
+	        <!-- 
+	        text-center : alinea elementos y textos en el centro
+	        mt-3 : equivalente a margint top
+	          -->
+	        <h3 class="text-center mt-3">Algunas de nuestras habitaciones</h3>
+
+
+	        <div class="row">
+
+	            <!--
+	            col : ayuda a definir columnas responsive
+	            col-12 : significa que para pantallas con un ancho menor de 576px, ocupara el total del ancho del contenedor padre
+	            col-md-12 : significa que para pantallas con un ancho de 768px o más, ocupara el total del ancho del contenedor padre,
+	            esto con el fin de que el usuario pueda visualizar mejor la imagen de la habitacion
+	            col-lg-6 : significa que para pantallas con un ancho de 992px o más, ocupara la mitad del ancho del contenedor padre
+	            -->
+
+
+	            <div class="col-12 col-md-12 col-lg-6">
+
+	                <!-- 
+	                img-fluid : Adapta de manera automatica el alto de la imagen, asimismo tiene por defecto width 100% 
+	                mt-5 : equivalente a un margin top
+	                -->
+
+	                <img th:src = "@{/img/roomSimple.jpg}"  class="img-fluid mt-5" alt="...">    
+
+
+	                <!--
+	                d-flex : utiliza flexbox, es lo mismo que display:flex
+	                justify-content-between : en el eje principal los "childs" estaran separados en los extremos
+	                align-items-center : En el eje secundario los "childs" estaran centrados
+	                flex-wrap : Permite que un elemento dentro del contenedor, salte de linea si no hay más espacio
+	                -->
+
+	                <div class="d-flex justify-content-between align-items-center flex-wrap" >
+	    
+	                    <!-- 
+	                    d-flex : utiliza flexbox, es lo mismo que display:flex
+	                    align-items-center : En el eje secundario los "childs" estaran centrados
+	                    gap-1 : permite la separacion entre los elementos contenidos
+	                    -->
+
+	                    <div class="d-flex align-items-center gap-1" >
+
+	                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+	                        <p class="mb-0 text-nowrap">2 personas</p>
+	                    </div>
+	                
+	                    <!-- 
+	                    mb-0 : equivalente a margin bottom, no existe margen de separacion solo en la parte inferior
+	                    -->
+	                    <p class="mb-0">s/. 108 x noche</p>
+	                
+	                </div>
+
+	                <h4>Habitacion estandar</h4>
+
+	            </div>
+
+	            <div class="col-12 col-md-12 col-lg-6">
+
+	                <img th:src = "@{/img/roomSuperior.jpg}" class="img-fluid mt-5" alt="...">    
+
+	                <div class="d-flex justify-content-between align-items-center flex-wrap" >
+	    
+	                    <div class="d-flex align-items-center gap-1">
+
+	                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+	                        <p class="mb-0 text-nowrap">2 personas</p>
+	                    </div>
+	                
+	                    <p class="mb-0">s/. 216 x noche</p>
+	                
+	                </div>
+
+	                <h4 >Deluxe chalet</h4>
+
+	            </div>
+
+	            <div class="col-12 col-md-12 col-lg-6">
+
+	                <img th:src = "@{/img/roomFamiliar.jpg}" class="img-fluid mt-5" alt="...">    
+
+	                <div class="d-flex justify-content-between align-items-center flex-wrap" >
+	    
+	                    <div class="d-flex align-items-center gap-1" >
+
+	                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+	                        <p class="mb-0 text-nowrap">4 personas</p>
+	                    </div>
+	                
+	                    <p class="mb-0">s/. 440 x noche</p>
+	                
+	                </div>
+
+	                <h4 >Familiar</h4>
+
+	            </div>
+
+	            <div class="col-12 col-md-12 col-lg-6">
+
+	                <img th:src = "@{/img/roomSuite.avif}" class="img-fluid mt-5" alt="...">    
+
+	                <div class="d-flex justify-content-between align-items-center flex-wrap" >
+	    
+	                    <div class="d-flex align-items-center gap-1" >
+
+	                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+	                        <p class="mb-0 text-nowrap">4 personas</p>
+	                    </div>
+	                
+	                    <p class="mb-0">s/. 800 x noche</p>
+	                
+	                </div>
+
+	                <h4 >Suite</h4>
+
+	            </div>
+
+	            
+	        </div>
+
+	    </div>
+
+
+	    
+
+	        <!--
+	    ==== SECCIÓN: FORMULARIO DE CONTACTO / RESERVA ====
+	    container: centra el contenido y aplica márgenes verticales (my-5)
+	    shadow: agrega sombra al contenedor
+	    rounded: bordes redondeados
+	    overflow-hidden: evita que elementos internos sobresalgan del contenedor
+	    -->
+
+	    <div class="container my-5 shadow rounded overflow-hidden">
+
+	        <div class="row justify-content-center">
+
+	            <!--
+	            Columna del formulario
+	            col-12: ocupa todo el ancho en móviles
+	            col-md-10: reduce ancho en tablets
+	            col-lg-8: centra y limita el formulario en pantallas grandes
+	            bg-white: fondo blanco
+	            p-5: padding interno grande
+	            -->
+	            <div class="col-12 col-md-10 col-lg-8 bg-white p-5">
+
+	                <!-- Títulos de la sección -->
+	                <h4 class="text-center text-secondary mb-2">
+	                    CONTACTANOS !!!
+	                </h4>
+
+	                <h1 class="text-center mb-4">
+	                    Reserva tu habitación
+	                </h1>
+
+	                <!--
+	                Formulario de reserva
+	                needs-validation: activa validación de Bootstrap
+	                novalidate: desactiva validación nativa del navegador
+	                -->
+	                <form id="formulario" class="needs-validation" novalidate>
+
+	                    <!-- Campo: Nombre -->
+	                    <div class="mb-3">
+
+	                        <input
+	                            class="form-control mb-3 rounded shadow-sm"
+	                            type="text"
+	                            placeholder="Nombre"
+	                            id="nombre"
+	                            pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+"
+	                            required>
+
+	                        <div class="invalid-feedback">
+	                            Complete este campo (solo letras)
+	                        </div>
+
+	                    </div>
+
+	                    <!-- Campo: Apellido -->
+	                    <div class="mb-3">
+
+	                        <input
+	                            class="form-control mb-3 rounded shadow-sm"
+	                            type="text"
+	                            placeholder="Apellido"
+	                            id="apellido"
+	                            pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+"
+	                            required>
+
+	                        <div class="invalid-feedback">
+	                            Complete este campo (solo letras)
+	                        </div>
+
+	                    </div>
+
+	                    <!-- Campo: Email -->
+	                    <div class="mb-3">
+
+	                        <input
+	                            class="form-control mb-3 rounded shadow-sm"
+	                            type="email"
+	                            placeholder="Email"
+	                            id="correo"
+	                            required>
+
+	                        <div class="invalid-feedback">
+	                            Ingrese un correo válido
+	                        </div>
+
+	                    </div>
+
+	                    <!-- Campo: Teléfono -->
+	                    <div class="mb-3">
+
+	                        <input
+	                            class="form-control mb-3 rounded shadow-sm"
+	                            type="tel"
+	                            placeholder="Teléfono"
+	                            id="telefono"
+	                            pattern="[0-9+ ]{9,15}"
+	                            required>
+
+	                        <div class="invalid-feedback">
+	                            Solo números
+	                        </div>
+
+	                    </div>
+
+	                    <!-- Campo: Mensaje opcional -->
+	                    <textarea
+	                        class="form-control mb-3 rounded shadow-sm"
+	                        placeholder="Mensaje (Opcional)"
+	                        id="mensaje">
+	                    </textarea>
+
+	                    <!-- Botón de envío -->
+	                    <button
+	                        class="btn btn-dark w-100 p-3 rounded shadow"
+	                        type="submit">
+	                        Enviar Reserva
+	                    </button>
+
+	                </form>
+
+	            </div>
+
+	        </div>
+
+	    </div>
+	        
+	        <!-- Modal -->
+	        <!--
+	==== MODAL: CONFIRMACIÓN DE ENVÍO DE FORMULARIO ====
+	modal: componente de Bootstrap para mostrar mensajes emergentes
+	fade: animación de aparición/desaparición del modal
+	tabindex="-1": evita foco automático del modal al cargar
+	-->
+
+	    <div class="modal fade" id="modalFormulario" tabindex="-1">
+
+	        <!-- Contenedor del modal centrado por defecto -->
+	        <div class="modal-dialog">
+
+	            <div class="modal-content">
+
+	                <!-- Encabezado del modal -->
+	                <div class="modal-header">
+
+	                    <!-- Título del mensaje -->
+	                    <h5 style="color: white;"  class="modal-title">Mensaje enviado</h5>
+
+	                    <!-- Botón para cerrar el modal -->
+	                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+	                </div>
+
+	                <!-- Cuerpo del modal -->
+	                <div class="modal-body">
+
+	                    <!-- Mensaje de confirmación -->
+	                    <p>
+	                        Gracias por tu interes.
+	                        Nos comunicaremos con usted pronto.
+	                    </p>
+
+	                </div>
+
+	                <!-- Pie del modal -->
+	                <div class="modal-footer">
+
+	                    <!-- Botón de confirmación/cierre -->
+	                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+	                        Aceptar
+	                    </button>
+
+	                </div>
+
+	            </div>
+
+	        </div>
+
+	    </div>
+
+
+
+	      
+
+	       
+
+	    
+	    
+    <!-- Pie de página -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- Bootstrap 5.3 JS (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script de validaciones personalizadas -->
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

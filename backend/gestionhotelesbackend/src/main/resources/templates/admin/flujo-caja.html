@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo de Caja - Royal Sayariy Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link th:href="@{/css/admin-flujo-caja.css}" rel="stylesheet">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand">
+        <h2>Royal Sayariy</h2>
+        <span>Panel administrativo</span>
+    </div>
+    <div class="menu">
+        <a th:href="@{/admin/dashboard}">
+            <i class="bi bi-grid-fill"></i> Dashboard
+        </a>
+        <a th:href="@{/admin/reservas}">
+            <i class="bi bi-calendar-check-fill"></i> Reservas
+        </a>
+        
+        
+        
+        <a th:href="@{/admin/habitaciones}">
+            <i class="bi bi-door-open-fill"></i> Habitaciones
+        </a>
+        
+        <a th:href="@{/admin/clientes}">
+            <i class="bi bi-people-fill"></i> Clientes
+        </a>
+        
+        <a th:href="@{/admin/flujo-caja}" class="active">
+            <i class="bi bi-cash-coin"></i> Flujo de Caja
+        </a>
+    </div>
+    <div class="logout">
+        <a th:href="@{/logout}">
+            <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+        </a>
+    </div>
+</aside>
+
+<main class="main-content">
+
+    
+
+    <!-- Stats cards -->
+    <div class="stats-row" th:if="${resumen != null}">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-calc"></i></div>
+            <div class="stat-label">Total del Mes</div>
+            <div class="stat-value">
+                S/ <span th:text="${#numbers.formatDecimal(resumen.get('totalMes'), 1, 2)}">0.00</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-coin"></i></div>
+            <div class="stat-label">Ingresos Hoy</div>
+            <div class="stat-value">
+                S/ <span th:text="${#numbers.formatDecimal(resumen.get('totalHoy'), 1, 2)}">0.00</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-receipt"></i></div>
+            <div class="stat-label">Transacciones del Mes</div>
+            <div class="stat-value" th:text="${resumen.get('cantidadMes')}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-arrow-down-circle"></i></div>
+            <div class="stat-label">Mostrando en tabla</div>
+            <div class="stat-value" th:text="${#lists.size(transacciones)}">0</div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <form th:action="@{/admin/flujo-caja}" method="get" class="filtros-row">
+        <div>
+            <label class="form-label">Desde</label>
+            <input type="date" name="desde" class="form-control" th:value="${desde}">
+        </div>
+        <div>
+            <label class="form-label">Hasta</label>
+            <input type="date" name="hasta" class="form-control" th:value="${hasta}">
+        </div>
+        <div>
+            <label class="form-label">Tipo</label>
+            <select name="tipo" class="form-select">
+                <option value="">Todos</option>
+                <option value="PAGO_ONLINE" th:selected="${tipoFiltro == 'PAGO_ONLINE'}">Pago Online</option>
+                <option value="PAGO_HOTEL" th:selected="${tipoFiltro == 'PAGO_HOTEL'}">Pago en Hotel</option>
+                <option value="PAGO_EXTRA" th:selected="${tipoFiltro == 'PAGO_EXTRA'}">Pago Extra</option>
+            </select>
+        </div>
+        <div class="filtros-actions">
+            <button type="submit" class="btn btn-filtrar">
+                <i class="bi bi-funnel-fill me-1"></i>Filtrar
+            </button>
+            <a th:href="@{/admin/flujo-caja}" class="btn btn-limpiar">
+                <i class="bi bi-eraser me-1"></i>Limpiar
+            </a>
+            <a th:href="@{/admin/flujo-caja/pdf(desde=${desde}, hasta=${hasta}, tipo=${tipoFiltro})}"
+               class="btn btn-pdf">
+                <i class="bi bi-file-pdf-fill me-1"></i>PDF
+            </a>
+        </div>
+    </form>
+
+    <!-- Tabla -->
+    <div class="table-container" th:if="${not #lists.isEmpty(transacciones)}">
+        <div class="table-responsive">
+            <table class="table custom-table align-middle">
+                <thead>
+                    <tr>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Reserva</th>
+                        <th class="text-center">Descripci&oacute;n</th>
+                        <th class="text-center">M&eacute;todo</th>
+                        <th class="text-center">Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="t : ${transacciones}">
+                        <td class="text-center" th:text="${#temporals.format(t.fecha, 'dd/MM/yyyy HH:mm')}">01/06/2026 15:30</td>
+                        <td class="text-center">
+                            <span class="fw-bold text-secondary" th:text="'#' + ${t.reservaId}">#1</span>
+                        </td>
+                        <td class="text-center" th:text="${t.descripcion}">Pago online</td>
+                        <td class="text-center">
+                            <span class="badge-metodo" th:text="${t.metodo}">TARJETA</span>
+                        </td>
+                        <td class="fw-bold monto-cell text-center"
+                            th:text="'S/ ' + ${#numbers.formatDecimal(t.monto, 1, 2)}">
+                            S/ 0.00
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="4" class="text-end">Total mostrado:</td>
+                        <td class="fw-bold monto-cell text-center">
+                            S/ <span th:text="${#numbers.formatDecimal(#aggregates.sum(transacciones.![monto]), 1, 2)}">0.00</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(transacciones)}" class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <h3>No hay transacciones</h3>
+        <p>No hay transacciones en el período seleccionado.</p>
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

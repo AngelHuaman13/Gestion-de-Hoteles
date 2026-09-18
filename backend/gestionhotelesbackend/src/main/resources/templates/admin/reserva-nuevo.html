@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Reserva - Royal Sayariy Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link th:href="@{/css/admin-flujo-caja.css}" rel="stylesheet">
+    <style>
+        .form-card {
+            background: white;
+            border-radius: 22px;
+            padding: 34px;
+            border: 1px solid #eee7e2;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+        }
+        .form-card h5 {
+            font-weight: 700;
+            color: var(--chalet-text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-card h5 i { color: var(--chalet-brown); }
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--chalet-text);
+            margin-bottom: 6px;
+        }
+        .form-control-custom, .form-select-custom {
+            border-radius: 12px;
+            border: 1px solid #e5e0db;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .form-control-custom:focus, .form-select-custom:focus {
+            border-color: var(--chalet-brown);
+            box-shadow: 0 0 0 3px rgba(126, 99, 84, 0.1);
+        }
+        .btn-submit {
+            background: var(--chalet-brown) !important;
+            color: white !important;
+            border-radius: 14px !important;
+            padding: 12px 32px !important;
+            font-weight: 700 !important;
+            border: none !important;
+            transition: 0.25s !important;
+        }
+        .btn-submit:hover { background: var(--chalet-hover) !important; transform: translateY(-2px); }
+        .btn-cancel {
+            background: white !important;
+            color: var(--chalet-text) !important;
+            border-radius: 14px !important;
+            padding: 12px 32px !important;
+            font-weight: 600 !important;
+            border: 1px solid #e5e0db !important;
+            text-decoration: none !important;
+            transition: 0.25s !important;
+        }
+        .btn-cancel:hover { background: #f8f5f2 !important; }
+        .switch-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: var(--soft-beige);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--chalet-text);
+        }
+        .switch-label input { width: 18px; height: 18px; accent-color: var(--chalet-brown); }
+        .total-box {
+            background: linear-gradient(135deg, #7E6354, #988a83);
+            border-radius: 16px;
+            padding: 20px 24px;
+            color: white;
+        }
+        .total-box .total-label { font-size: 0.85rem; opacity: 0.85; margin-bottom: 4px; }
+        .total-box .total-amount { font-size: 2rem; font-weight: 800; }
+
+        .cliente-search-wrapper { position: relative; }
+        .cliente-results {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e0db;
+            border-radius: 12px;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-top: 4px;
+        }
+        .cliente-results.show { display: block; }
+        .cliente-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #f5f0ed;
+            transition: 0.1s;
+        }
+        .cliente-item:last-child { border-bottom: none; }
+        .cliente-item:hover { background: var(--soft-beige); }
+        .cliente-item strong { color: var(--chalet-text); font-size: 0.9rem; }
+        .cliente-item small { color: #9ca3af; font-size: 0.8rem; }
+        .cliente-item.disabled {
+            cursor: default;
+            color: #9ca3af;
+            text-align: center;
+            padding: 20px 14px;
+        }
+        .cliente-item.disabled:hover { background: transparent; }
+
+        .cliente-seleccionado {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: rgba(34,197,94,0.08);
+            border-radius: 14px;
+            color: #15803d;
+            font-weight: 600;
+        }
+        .cliente-seleccionado i { font-size: 1.3rem; }
+        .cliente-seleccionado .btn-cambiar {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--chalet-brown);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand">
+        <h2>Royal Sayariy</h2>
+        <span>Panel administrativo</span>
+    </div>
+    <div class="menu">
+        <a th:href="@{/admin/dashboard}"><i class="bi bi-grid-fill"></i> Dashboard</a>
+        <a th:href="@{/admin/reservas}"><i class="bi bi-calendar-check-fill"></i> Reservas</a>
+        <a th:href="@{/admin/flujo-caja}"><i class="bi bi-cash-coin"></i> Flujo de Caja</a>
+        <a th:href="@{/admin/habitaciones}"><i class="bi bi-door-open-fill"></i> Habitaciones</a>
+        <a th:href="@{/admin/clientes}"><i class="bi bi-people-fill"></i> Clientes</a>
+    </div>
+    <div class="logout">
+        <a th:href="@{/logout}"><i class="bi bi-box-arrow-left"></i> Cerrar Sesión</a>
+    </div>
+</aside>
+
+<main class="main-content">
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Nueva Reserva</h1>
+            <p class="hero-subtitle">Registra una nueva reserva para un cliente.</p>
+        </div>
+    </section>
+
+    <form th:action="@{/admin/reserva/crear}" method="post" class="row g-4" id="reservaForm">
+        <input type="hidden" name="usuarioId" id="usuarioIdHidden" value="">
+        <input type="hidden" name="metodoPago" value="EFECTIVO" id="metodoPagoHidden">
+
+        <div class="col-lg-8">
+
+            <!-- Cliente -->
+            <div class="form-card mb-4">
+                <h5><i class="bi bi-person-fill"></i> Cliente</h5>
+
+                <div id="clienteSearchWrapper" class="cliente-search-wrapper">
+                    <label class="form-label-custom">Buscar cliente por nombre o email</label>
+                    <input type="text" id="clienteSearch" class="form-control form-control-custom"
+                           placeholder="Escriba al menos 2 caracteres..." autocomplete="off">
+                    <div id="clienteResults" class="cliente-results"></div>
+                </div>
+
+                <div id="clienteSeleccionado" class="cliente-seleccionado">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span id="clienteNombre"></span>
+                    <button type="button" class="btn-cambiar" onclick="limpiarCliente()">Cambiar</button>
+                </div>
+
+
+            </div>
+
+            <!-- Habitación -->
+            <div class="form-card mb-4">
+                <h5><i class="bi bi-door-open-fill"></i> Habitación</h5>
+                <label class="form-label-custom">Seleccionar habitación</label>
+                <select name="habitacionId" class="form-select form-select-custom" id="habitacionSelect"
+                        onchange="calcularTotal()" required>
+                    <option value="">— Seleccione una habitación —</option>
+                    <option th:each="h : ${habitaciones}" th:value="${h.id}"
+                            th:text="${h.tipo} + ' - S/ ' + ${h.precio} + ' (' + (h.disponible ? 'Disponible' : 'Ocupada') + ')'"
+                            th:data-precio="${h.precio}"></option>
+                </select>
+            </div>
+
+            <!-- Fechas -->
+            <div class="form-card mb-4">
+                <h5><i class="bi bi-calendar-event-fill"></i> Fechas</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Fecha de ingreso</label>
+                        <input type="date" name="fechaInicio" class="form-control form-control-custom"
+                               id="fechaInicio" onchange="calcularTotal()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Fecha de salida</label>
+                        <input type="date" name="fechaFin" class="form-control form-control-custom"
+                               id="fechaFin" onchange="calcularTotal()">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <!-- Pago -->
+            <div class="form-card mb-4">
+                <h5><i class="bi bi-cash-coin"></i> Método de Pago</h5>
+                <div class="d-flex flex-column gap-3">
+                    <label class="switch-label" style="background:rgba(34,197,94,0.08);">
+                        <input type="radio" name="metodoPagoRadio" value="EFECTIVO" checked
+                               onchange="document.getElementById('metodoPagoHidden').value='EFECTIVO'">
+                        <strong>Efectivo</strong> <span class="text-muted fw-normal small">— pago en efectivo</span>
+                    </label>
+                    <label class="switch-label" style="background:rgba(99,102,241,0.08);">
+                        <input type="radio" name="metodoPagoRadio" value="YAPE"
+                               onchange="document.getElementById('metodoPagoHidden').value='YAPE'">
+                        <strong>Yape</strong> <span class="text-muted fw-normal small">— pago con Yape</span>
+                    </label>
+                    <label class="switch-label" style="background:rgba(245,158,11,0.08);">
+                        <input type="radio" name="metodoPagoRadio" value="PLIN"
+                               onchange="document.getElementById('metodoPagoHidden').value='PLIN'">
+                        <strong>Plin</strong> <span class="text-muted fw-normal small">— pago con Plin</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Total -->
+            <div class="total-box mb-4" id="totalBox" style="display:none;">
+                <div class="total-label">Total estimado</div>
+                <div class="total-amount" id="totalDisplay">S/ 0.00</div>
+                <div class="mt-2" style="opacity:0.8;font-size:0.85rem;">
+                    <span id="nochesDisplay">0</span> noche(s) x S/ <span id="precioDisplay">0</span>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-submit flex-fill">
+                    <i class="bi bi-check-circle-fill me-1"></i> Crear Reserva
+                </button>
+                <a th:href="@{/admin/reservas}" class="btn btn-cancel">
+                    <i class="bi bi-x-circle me-1"></i> Cancelar
+                </a>
+            </div>
+
+        </div>
+    </form>
+
+</main>
+
+<div class="modal fade" id="errorModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;border:none;box-shadow:0 10px 40px rgba(0,0,0,0.12);">
+            <div class="modal-body text-center p-4">
+                <div style="font-size:3rem;color:#dc3545;margin-bottom:12px;">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+                <h5 style="font-weight:700;color:var(--chalet-text);margin-bottom:8px;">Error</h5>
+                <p id="errorModalMessage" style="color:#6b7280;margin-bottom:20px;font-size:0.95rem;"></p>
+                <button type="button" class="btn btn-submit" data-bs-dismiss="modal" style="padding:10px 28px !important;">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script th:inline="javascript">
+const clientes = /*[[${clientes}]]*/ [];
+</script>
+<script>
+function formatLocalDate(date) {
+    var y = date.getFullYear();
+    var m = String(date.getMonth() + 1).padStart(2, '0');
+    var d = String(date.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+}
+
+function configurarDia(dayElem, blockedDates) {
+    if (!dayElem.dateObj) return;
+    var str = formatLocalDate(dayElem.dateObj);
+    if (blockedDates.indexOf(str) !== -1) {
+        dayElem.title = 'No disponible';
+        dayElem.style.textDecoration = 'line-through';
+        dayElem.style.color = '#e76f51';
+        dayElem.style.opacity = '0.6';
+    }
+}
+
+var fpInicio = null, fpFin = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    fpInicio = flatpickr('#fechaInicio', {
+        locale: 'es',
+        dateFormat: 'Y-m-d',
+        minDate: 'today',
+        onChange: function() { calcularTotal(); },
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+            configurarDia(dayElem, fp.config.disable || []);
+        }
+    });
+    fpFin = flatpickr('#fechaFin', {
+        locale: 'es',
+        dateFormat: 'Y-m-d',
+        minDate: 'today',
+        onChange: function() { calcularTotal(); },
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+            configurarDia(dayElem, fp.config.disable || []);
+        }
+    });
+
+    var selectHab = document.getElementById('habitacionSelect');
+
+    function cargarBloqueadas(habitacionId) {
+        if (!habitacionId) return;
+        fetch('/api/reservas/bloqueadas/' + habitacionId)
+            .then(function(r) { return r.json(); })
+            .then(function(fechas) {
+                if (fpInicio) {
+                    fpInicio.set('disable', fechas);
+                    fpInicio.clear();
+                }
+                if (fpFin) {
+                    fpFin.set('disable', fechas);
+                    fpFin.clear();
+                }
+                if (fpInicio) fpInicio.redraw();
+                if (fpFin) fpFin.redraw();
+            });
+    }
+
+    selectHab.addEventListener('change', function() {
+        cargarBloqueadas(this.value);
+    });
+
+    if (selectHab.value) {
+        cargarBloqueadas(selectHab.value);
+    }
+
+    document.getElementById('clienteSearch').addEventListener('input', function() {
+        const term = this.value.toLowerCase().trim();
+        if (term.length < 2) {
+            document.getElementById('clienteResults').classList.remove('show');
+            return;
+        }
+        const resultados = clientes.filter(c =>
+            (c.nombre && c.nombre.toLowerCase().includes(term)) ||
+            (c.email && c.email.toLowerCase().includes(term))
+        );
+        mostrarResultados(resultados);
+    });
+
+    document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('clienteSearchWrapper');
+        if (!wrapper.contains(e.target)) {
+            document.getElementById('clienteResults').classList.remove('show');
+        }
+    });
+
+    function mostrarError(msg) {
+        document.getElementById('errorModalMessage').textContent = msg;
+        new bootstrap.Modal(document.getElementById('errorModal')).show();
+    }
+
+    document.getElementById('reservaForm').addEventListener('submit', function(e) {
+        const usuarioId = document.getElementById('usuarioIdHidden').value;
+        if (!usuarioId) {
+            e.preventDefault();
+            mostrarError('Debe seleccionar un cliente de la lista.');
+            return;
+        }
+        const habitacion = document.getElementById('habitacionSelect').value;
+        if (!habitacion) {
+            e.preventDefault();
+            mostrarError('Debe seleccionar una habitación.');
+            return;
+        }
+        const inicio = document.getElementById('fechaInicio').value;
+        const fin = document.getElementById('fechaFin').value;
+        if (!inicio || !fin) {
+            e.preventDefault();
+            mostrarError('Debe seleccionar ambas fechas.');
+            return;
+        }
+        if (inicio >= fin) {
+            e.preventDefault();
+            mostrarError('La fecha de salida debe ser posterior a la fecha de ingreso.');
+            return;
+        }
+    });
+});
+
+function mostrarResultados(lista) {
+    const container = document.getElementById('clienteResults');
+    if (lista.length === 0) {
+        container.innerHTML = '<div class=\"cliente-item disabled\">Sin resultados</div>';
+    } else {
+        container.innerHTML = lista.map(function(c) {
+            return '<div class=\"cliente-item\" onclick=\"seleccionarCliente(' + c.id + ', \'' + escApos(c.nombre) + '\', \'' + escApos(c.email) + '\')\">' +
+                '<strong>' + c.nombre + '</strong><br>' +
+                '<small>' + c.email + '</small>' +
+                '</div>';
+        }).join('');
+    }
+    container.classList.add('show');
+}
+
+function escApos(s) {
+    return s ? s.replace(/'/g, "\\'") : '';
+}
+
+function seleccionarCliente(id, nombre, email) {
+    document.getElementById('usuarioIdHidden').value = id;
+    document.getElementById('clienteSearchWrapper').style.display = 'none';
+    document.getElementById('clienteSeleccionado').style.display = 'flex';
+    document.getElementById('clienteNombre').textContent = nombre + ' (' + email + ')';
+    document.getElementById('clienteResults').classList.remove('show');
+}
+
+function limpiarCliente() {
+    document.getElementById('usuarioIdHidden').value = '';
+    document.getElementById('clienteSearchWrapper').style.display = 'block';
+    document.getElementById('clienteSeleccionado').style.display = 'none';
+    document.getElementById('clienteSearch').value = '';
+}
+
+function calcularTotal() {
+    const select = document.getElementById('habitacionSelect');
+    const precio = parseFloat(select.options[select.selectedIndex]?.dataset.precio || 0);
+    const inicio = document.getElementById('fechaInicio').value;
+    const fin = document.getElementById('fechaFin').value;
+
+    const totalBox = document.getElementById('totalBox');
+    const totalDisplay = document.getElementById('totalDisplay');
+    const nochesDisplay = document.getElementById('nochesDisplay');
+    const precioDisplay = document.getElementById('precioDisplay');
+
+    if (!inicio || !fin || !precio || precio === 0) {
+        totalBox.style.display = 'none';
+        return;
+    }
+
+    const d1 = new Date(inicio + 'T00:00:00');
+    const d2 = new Date(fin + 'T00:00:00');
+    const diff = Math.max(0, Math.floor((d2 - d1) / (1000 * 60 * 60 * 24)));
+
+    if (diff <= 0) {
+        totalBox.style.display = 'none';
+        return;
+    }
+
+    const total = diff * precio;
+    totalDisplay.textContent = 'S/ ' + total.toFixed(2);
+    nochesDisplay.textContent = diff;
+    precioDisplay.textContent = precio;
+    totalBox.style.display = 'block';
+}
+</script>
+</body>
+</html>

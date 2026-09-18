@@ -1,0 +1,499 @@
+/*
+ 
+ * VARIABLES GLOBALES DE COLOR (CSS Custom Properties)
+ 
+ * Definidas en :root para que estén disponibles en todo el
+ * documento. Facilitan mantener una paleta de colores
+ * consistente y hacer cambios globales desde un solo lugar.
+ *
+ * --chalet-brown  : Color café principal (encabezados, acentos)
+ * --chalet-hover  : Café más oscuro para hover de botones/enlaces
+ * --chalet-text   : Color base del texto
+ * --bg-body       : Fondo blanco del cuerpo
+ * --bg-header     : Fondo de la barra de navegación
+ * --bg-footer     : Fondo del pie de página
+ * --text          : Color de texto sobre fondos oscuros
+ * --bg-modal      : Fondo de ventanas modales
+ * --soft-beige    : Beige claro usado en hover de botones secundarios
+ * --light-beige   : Beige más claro usado en fondos de menú
+ 
+ */
+:root {
+    --chalet-brown: #7E6354;
+    --chalet-hover: #614a3e;
+    --chalet-text: #4a4a4a;
+    --bg-body: #ffffff;
+    --bg-header: #664535;
+    --bg-footer: #000000;
+    --text: #ffffff;
+    --bg-modal: #5c4a41;
+    --soft-beige: #f5f0ed;
+    --light-beige: #f3e9dc;
+}
+
+/*
+ * ============================================================
+ * RESET Y ESTILOS BASE
+ * ============================================================
+ * Aplica la fuente Inter a todos los elementos.
+ * El fondo usa un degradado con dos círculos radiales para
+ * dar un efecto visual suave y elegante.
+ * overflow-x: hidden evita scroll horizontal no deseado.
+ * ============================================================
+ */
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, #f5ebe0 0%, transparent 25%),
+        radial-gradient(circle at bottom right, #e6ccb2 0%, transparent 25%),
+        linear-gradient(135deg, #fffaf5, #f3e9dc);
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #3e2c23;
+}
+
+/*
+ * ============================================================
+ * SIDEBAR (BARRA LATERAL FIJA)
+ * ============================================================
+ * Barra lateral de 270px de ancho, fija en la parte izquierda.
+ * Usa backdrop-filter: blur() para un efecto de vidrio
+ * (frosted glass) semitransparente.
+ * z-index: 1000 para estar por encima del contenido principal.
+ * ============================================================
+ */
+.sidebar {
+    width: 270px;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 28px 22px;
+    z-index: 1000;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/*
+ * Marca del hotel en el sidebar
+ */
+.brand {
+    margin-bottom: 45px;
+}
+
+.brand h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: var(--chalet-brown);
+}
+
+.brand span {
+    color: #7c6f64;
+    font-size: 0.95rem;
+}
+
+/*
+ * Estilos del título principal (hero) que se usa en varias
+ * páginas del panel admin. Reutilizables gracias a las clases.
+ */
+.hero-section {
+    background:
+        linear-gradient(135deg, #7E6354, #988a83);
+    border-radius: 22px;
+    padding: 42px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(126, 99, 84, 0.18);
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: -80px;
+    right: -80px;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    bottom: -60px;
+    left: -60px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    opacity: 0.92;
+    max-width: 700px;
+    margin-bottom: 0;
+}
+
+.btn-dashboard {
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.btn-dashboard:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/*
+ * MENÚ DE NAVEGACIÓN LATERAL
+ * Los enlaces tienen bordes redondeados, efecto hover con
+ * desplazamiento a la derecha (translateX), y el enlace
+ * activo (página actual) se resalta con fondo café.
+ */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #5c4b43;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background: var(--light-beige);
+    color: var(--chalet-brown);
+    transform: translateX(4px);
+}
+
+.menu a.active {
+    background: var(--chalet-brown);
+    color: white;
+    box-shadow: 0 10px 22px rgba(126, 99, 84, 0.20);
+}
+
+/*
+ * BOTÓN DE CERRAR SESIÓN
+ * Posicionado en la parte inferior del sidebar.
+ * Color naranja/ámbar para destacar visualmente.
+ */
+.logout {
+    position: absolute;
+    bottom: 35px;
+    left: 22px;
+    right: 22px;
+}
+
+.logout a {
+    display: flex;
+    gap: 10px;
+    color: #bc6c25;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 14px;
+}
+
+.logout a:hover {
+    background: rgba(188, 108, 37, 0.08);
+}
+
+/*
+ * ============================================================
+ * CONTENIDO PRINCIPAL
+ * ============================================================
+ * margin-left: 270px deja espacio para el sidebar fijo.
+ * ============================================================
+ */
+.main-content {
+    margin-left: 270px;
+    padding: 40px;
+}
+
+/*
+ * ============================================================
+ * HERO (BANNER SUPERIOR)
+ * ============================================================
+ * Degradado lineal café, bordes redondeados, sombra.
+ * El pseudo-elemento ::before agrega un círculo decorativo
+ * semitransparente en la esquina superior derecha.
+ * ============================================================
+ */
+.hero {
+    background:
+        linear-gradient(135deg, #7E6354, #988a83);
+    border-radius: 22px;
+    padding: 42px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(126, 99, 84, 0.18);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    top: -60px;
+    right: -60px;
+}
+
+.hero h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+}
+
+.hero p {
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+/*
+ * ============================================================
+ * TABLA PERSONALIZADA
+ * ============================================================
+ * Contenedor con efecto glass (transparencia + blur).
+ * La tabla usa border-collapse: separate con espaciado
+ * entre filas para un diseño más moderno y aireado.
+ * Cada fila tiene fondo blanco, sombra y bordes redondeados.
+ * Al hacer hover, la fila se eleva (translateY).
+ * ============================================================
+ */
+.table-container {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    border-radius: 28px;
+    padding: 30px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+}
+
+/*
+ * border-collapse: separate + border-spacing permite el
+ * espacio vertical entre filas para un look más moderno.
+ */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    width: 100%;
+}
+
+/*
+ * Encabezados de la tabla: sin borde, color gris, mayúsculas
+ * con letter-spacing para un aspecto elegante.
+ */
+.custom-table thead th {
+    border: none;
+    color: #7c6f64;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding-bottom: 18px;
+}
+
+/*
+ * Filas del cuerpo: fondo blanco, sombra sutil.
+ * Al hacer hover, la fila se eleva 4px hacia arriba y la
+ * sombra se intensifica para dar sensación de profundidad.
+ */
+.custom-table tbody tr {
+    background: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+}
+
+.custom-table tbody tr:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(176, 137, 104, 0.18);
+}
+
+.custom-table td {
+    border: none;
+    padding: 18px;
+}
+
+/*
+ * Bordes redondeados en la primera y última celda de cada fila
+ * para que el fondo blanco de la fila se vea con esquinas
+ * redondeadas (necesario con border-collapse: separate).
+ */
+.custom-table tbody tr td:first-child {
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+
+.custom-table tbody tr td:last-child {
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+/*
+ * ============================================================
+ * BADGES DE ROL
+ * ============================================================
+ * .badge-admin: rojo semitransparente para el rol ADMIN
+ * .badge-user: azul semitransparente para el rol USER
+ * border-radius: 999px → píldora (borde totalmente redondeado)
+ * ============================================================
+ */
+.badge-admin {
+    background: rgba(220, 38, 38, 0.15);
+    color: #b91c1c;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.badge-user {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+/*
+ * ============================================================
+ * RESPONSIVE
+ * ============================================================
+ * En pantallas de 992px o menos, el sidebar pasa a ser
+ * horizontal (width: 100%) y el contenido principal deja
+ * de tener margen izquierdo.
+ * ============================================================
+ */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-action {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-edit {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+}
+
+.btn-edit:hover {
+    background: rgba(245, 158, 11, 0.25);
+    transform: translateY(-2px);
+    color: #b45309;
+}
+
+.btn-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+.btn-delete:hover {
+    background: rgba(239, 68, 68, 0.25);
+    transform: translateY(-2px);
+    color: #b91c1c;
+}
+
+.btn-delete:disabled,
+.btn-delete.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+    background: rgba(107, 114, 128, 0.15) !important;
+    color: #6b7280 !important;
+}
+
+.password-box {
+    background: #f5f0ed;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 2px dashed var(--chalet-brown);
+}
+
+.password-box .password-value {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--chalet-brown);
+    letter-spacing: 3px;
+}
+
+.password-box .password-label {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}

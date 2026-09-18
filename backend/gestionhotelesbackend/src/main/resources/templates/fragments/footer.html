@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+  FRAGMENTO: FOOTER (PIE DE PÁGINA)
+  ===================================
+  Este archivo define un fragmento Thymeleaf que se inserta en
+  otras páginas mediante:
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+  xmlns:th="http://www.thymeleaf.org"
+  → Habilita directivas Thymeleaf.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <!--
+      Estilo inline del footer.
+      Define el fondo usando la variable CSS --bg-footer,
+      bordes redondeados y márgenes laterales.
+      NOTA: Este estilo solo se carga si el fragmento se incluye
+      en una página que ya define las variables CSS en :root.
+    -->
+    <style>
+        .footer{
+            background-color: var(--bg-footer);
+            margin: 0rem 0.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!--
+      th:fragment="footer"
+      → Define este <footer> como un fragmento reutilizable
+        identificado como "footer". Se invoca desde otras páginas
+        con th:replace="~{fragments/footer :: footer}".
+    -->
+    <footer th:fragment="footer" class="text-white pt-5 pb-3 footer">
+        <div class="container">
+
+            <!--
+              row: organiza el contenido en 3 columnas
+              align-items-center: centrado vertical
+              text-center text-md-start: centrado en móvil, izquierda en desktop
+            -->
+            <div class="row align-items-center text-center text-md-start">
+
+                <!--
+                  COLUMNA 1: DIRECCIÓN
+                  col-md-4 → 1/3 del ancho en pantallas md+
+                -->
+                <div class="col-md-4 mb-4 mb-md-0">
+
+                    <h6 class="fw-bold">Direccion</h6>
+
+                    <!-- Dirección con ícono de mapa -->
+                    <div class="d-flex align-items-start justify-content-center justify-content-md-start gap-2">
+
+                        <!--
+                          th:src="@{/icons/map-icon.png}"
+                          → Ruta dinámica a la imagen del ícono de ubicación.
+                            Las imágenes deben estar en src/main/resources/static/icons/.
+                        -->
+                        <img th:src="@{/icons/map-icon.png}" alt="Ubicación" width="15" height="20">
+
+                        <p class="mb-0">
+                            Av. El Sol 175 San Juan de Lurigancho
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!--
+                  COLUMNA 2: LOGO + REDES SOCIALES
+                  text-center: centra el logo y los íconos
+                -->
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+
+                    <!-- Logo del hotel -->
+                    <div class="mb-3">
+                        <div class="logo">
+                            <a href="#">
+                                <img th:src="@{/icons/logo.png}" alt="Logo">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Íconos de redes sociales (enlaces a #, sin destino real) -->
+                    <div class="d-flex justify-content-center gap-3">
+
+                        <a href="#">
+                            <img th:src="@{/icons/fb-icon.png}" alt="Facebook" width="30" height="30">
+                        </a>
+
+                        <a href="#">
+                            <img th:src="@{/icons/twitter-icon.png}" alt="Twitter" width="30" height="30">
+                        </a>
+
+                        <a href="#">
+                            <img th:src="@{/icons/instagram-icon.png}" alt="Instagram" width="30" height="30">
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!--
+                  COLUMNA 3: CONTACTO
+                  text-md-end → alineación a la derecha en desktop
+                -->
+                <div class="col-md-4 text-md-end text-center">
+
+                    <h6 class="fw-bold">Contactanos</h6>
+
+                    <!-- Teléfono -->
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2 mb-2">
+                        <img th:src="@{/icons/call-icon.png}" alt="Teléfono" width="18" height="18">
+                        <p class="mb-0">+51 995 567 896</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2">
+                        <img th:src="@{/icons/mail-icon.png}" alt="Email" width="18" height="18">
+                        <p class="mb-0">royal_sayariy_hotel@hotmail.com</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Separador horizontal -->
+            <hr class="border-light my-4">
+
+            <!-- Texto de copyright -->
+            <div class="text-center small">
+                <p class="mb-0">© Creado por Grupo 14 - V 3.1.2</p>
+            </div>
+
+        </div>
+    </footer>
+
+</body>
+</html>

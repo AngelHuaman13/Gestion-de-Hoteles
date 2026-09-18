@@ -1,0 +1,599 @@
+/*
+ * ============================================================
+ * VARIABLES GLOBALES DE COLOR
+ * ============================================================
+ */
+:root {
+    --chalet-brown: #7E6354;
+    --chalet-hover: #614a3e;
+    --chalet-text: #4a4a4a;
+    --bg-body: #ffffff;
+    --bg-header: #664535;
+    --bg-footer: #000000;
+    --text: #ffffff;
+    --bg-modal: #5c4a41;
+    --soft-beige: #f5f0ed;
+    --light-beige: #f3e9dc;
+}
+
+/*
+ * ============================================================
+ * ESTILOS BASE
+ * ============================================================
+ * Fondo con dos círculos radiales azulados sobre gris claro.
+ * Tema índigo consistente con la página de habitaciones.
+ * ============================================================
+ */
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, #e0e7ff 0%, transparent 30%),
+        radial-gradient(circle at bottom right, #dbeafe 0%, transparent 30%),
+        #f5f7fb;
+    min-height: 100vh;
+    color: #111827;
+    overflow-x: hidden;
+}
+
+/*
+ * ============================================================
+ * SIDEBAR (BARRA LATERAL FIJA)
+ * ============================================================
+ * 270px fijo, efecto glass (backdrop-filter: blur), z-index
+ * alto para superponerse al contenido principal.
+ * ============================================================
+ */
+.sidebar {
+    width: 270px;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 28px 22px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.brand {
+    margin-bottom: 45px;
+}
+
+.brand h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: var(--chalet-brown);
+}
+
+.brand span {
+    color: #7c6f64;
+    font-size: 0.95rem;
+}
+
+/*
+ * Menú lateral: enlaces flex con ícono, hover con
+ * desplazamiento a la derecha, enlace activo resaltado.
+ */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 18px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: #374151;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.menu a:hover {
+    background: var(--light-beige);
+    color: var(--chalet-brown);
+    transform: translateX(4px);
+}
+
+.menu a.active {
+    background: var(--chalet-brown);
+    color: white;
+    box-shadow: 0 10px 22px rgba(126, 99, 84, 0.20);
+}
+
+/*
+ * Cerrar sesión: fijo en la parte inferior, color rojo.
+ */
+.logout {
+    position: absolute;
+    bottom: 35px;
+    left: 22px;
+    right: 22px;
+}
+
+.logout a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #ef4444;
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.logout a:hover {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/*
+ * ============================================================
+ * CONTENIDO PRINCIPAL
+ * ============================================================
+ * margin-left: 270px para dejar espacio al sidebar fijo.
+ * ============================================================
+ */
+.main-content {
+    margin-left: 270px;
+    padding: 40px;
+}
+
+/*
+ * ============================================================
+ * HERO (BANNER SUPERIOR)
+ * ============================================================
+ * Degradado café con círculos decorativos y botón glass.
+ * ============================================================
+ */
+.hero-section {
+    background:
+        linear-gradient(135deg, #7E6354, #988a83);
+    border-radius: 22px;
+    padding: 42px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(126, 99, 84, 0.18);
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: -80px;
+    right: -80px;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    bottom: -60px;
+    left: -60px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero-subtitle {
+    opacity: 0.92;
+    max-width: 700px;
+    margin-bottom: 0;
+}
+
+.btn-dashboard {
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.btn-dashboard:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/*
+ * ============================================================
+ * TARJETAS DE ESTADÍSTICAS
+ * ============================================================
+ * Fondo blanco, efecto hover con elevación y sombra café.
+ * Íconos con degradados azul, verde y rojo.
+ * ============================================================
+ */
+.stats-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    border: 1px solid #eee7e2;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    transition: 0.3s ease;
+    height: 100%;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(126, 99, 84, 0.10);
+}
+
+.stats-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 22px;
+}
+
+.icon-blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.icon-green {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.icon-red {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.stats-card h3 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.stats-card p {
+    margin: 0;
+    color: #6b7280;
+}
+
+/*
+ * ============================================================
+ * CONTENEDOR DE TABLA
+ * ============================================================
+ * Efecto glass, bordes muy redondeados (32px), doble sombra
+ * para dar profundidad.
+ * ============================================================
+ */
+.table-container {
+    margin-top: 35px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    border-radius: 32px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/*
+ * ============================================================
+ * TABLA PERSONALIZADA
+ * ============================================================
+ * border-spacing separa las filas verticalmente.
+ * Cada fila tiene fondo blanco, sombra, y al hacer hover
+ * se eleva (translateY) y escala ligeramente (scale(1.01))
+ * con sombra índigo.
+ * ============================================================
+ */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0 14px;
+    margin: 0;
+}
+
+.custom-table thead th {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding-bottom: 18px;
+}
+
+.custom-table tbody tr {
+    background: white;
+    
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.custom-table tbody tr:hover {
+    
+    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.12);
+}
+
+.custom-table td {
+    border: none;
+    padding: 22px 18px;
+    vertical-align: middle;
+}
+
+.custom-table tbody tr td:first-child {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+}
+
+.custom-table tbody tr td:last-child {
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+/*
+ * ============================================================
+ * COMPONENTE DE USUARIO EN TABLA
+ * ============================================================
+ * .user-box: contenedor flex con avatar circular + nombre
+ * .avatar: círculo de 48px con inicial del nombre, fondo
+ *   degradado índigo, flex-shrink: 0 evita que se comprima
+ * .user-name: nombre en negrita
+ * .room-type: tipo de habitación en color índigo
+ * ============================================================
+ */
+.user-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-weight: 700;
+}
+
+.room-type {
+    color: var(--chalet-brown);
+    font-weight: 700;
+}
+
+/*
+ * ============================================================
+ * BADGES DE ESTADO DE RESERVA
+ * ============================================================
+ * Forma de píldora (border-radius: 999px) para cada estado:
+ *
+ * .status-active  → verde:  reserva activa
+ * .status-pending → naranja: reserva pendiente
+ * .status-cancel  → rojo:    reserva cancelada
+ * .status-complete→ gris:    reserva completada
+ *
+ * Cada badge usa background semitransparente con el color
+ * correspondiente para un efecto sutil y elegante.
+ * ============================================================
+ */
+.status {
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.status-active {
+    background: rgba(34, 197, 94, 0.15);
+    color: #15803d;
+}
+
+.status-pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+}
+
+.status-cancel {
+    background: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+.status-complete {
+    background: rgba(107, 114, 128, 0.15);
+    color: #374151;
+}
+
+/*
+ * ============================================================
+ * BOTONES DE ACCIÓN (CRUD)
+ * ============================================================
+ * .action-buttons: contenedor flex con wrap para que los
+ *   botones no se desborden en pantallas pequeñas
+ * .btn-action: botón sin borde con bordes redondeados
+ * .btn-edit: amarillo/naranja semitransparente (editar)
+ * .btn-delete: rojo semitransparente (eliminar)
+ * Al hacer hover: se elevan ligeramente (translateY -2px)
+ * ============================================================
+ */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: 0.25s;
+    text-decoration: none;
+}
+
+.btn-edit {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+}
+
+.btn-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+}
+
+/*
+ * ============================================================
+ * ESTADO VACÍO (EMPTY STATE)
+ * ============================================================
+ * Se muestra cuando no hay reservas registradas.
+ * Ícono grande centrado con texto informativo.
+ * ============================================================
+ */
+.empty-state {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 30px;
+    padding: 70px 30px;
+    text-align: center;
+    margin-top: 35px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #6366f1;
+    margin-bottom: 22px;
+}
+
+.empty-state h3 {
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #6b7280;
+}
+
+/*
+ * ============================================================
+ * RESPONSIVE
+ * ============================================================
+ * 992px: sidebar horizontal, tabla con scroll horizontal
+ *   (min-width: 950px).
+ * 768px: reducción de fuentes, padding, y los botones de
+ *   acción pasan a ser verticales (flex-direction: column).
+ * ============================================================
+ */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .logout {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-top: 25px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 24px 18px;
+    }
+
+    .hero-section {
+        padding: 30px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .table-container {
+        padding: 20px;
+    }
+
+    .custom-table {
+        min-width: 950px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.7rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .stats-card {
+        padding: 24px;
+    }
+
+    .stats-card h3 {
+        font-size: 1.9rem;
+    }
+
+    .table-container {
+        border-radius: 24px;
+        padding: 16px;
+    }
+
+    .custom-table td {
+        padding: 18px 14px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-action {
+        width: 100%;
+        text-align: center;
+    }
+}

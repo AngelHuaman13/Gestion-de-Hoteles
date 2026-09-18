@@ -1,0 +1,422 @@
+/*
+ * ============================================================
+ * VARIABLES GLOBALES DE COLOR
+ * ============================================================
+ * Definidas en :root para acceso global. Permiten cambiar la
+ * paleta de colores del dashboard desde un solo lugar.
+ * ===============================	=============================
+ */
+:root {
+    --chalet-brown: #7E6354;
+    --chalet-hover: #614a3e;
+    --chalet-text: #4a4a4a;
+    --bg-body: #ffffff;
+    --bg-header: #664535;
+    --bg-footer: #000000;
+    --text: #ffffff;
+    --bg-modal: #5c4a41;
+    --soft-beige: #f5f0ed;
+    --light-beige: #f3e9dc;
+}
+
+/*
+ * ============================================================
+ * RESET Y ESTILOS BASE
+ * ============================================================
+ * Fondo con degradado lineal suave de blanco a beige claro.
+ * overflow-x: hidden evita scroll horizontal no deseado.
+ * ============================================================
+ */
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #ffffff, #f8f5f2);
+    color: var(--chalet-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/*
+ * ============================================================
+ * SIDEBAR (BARRA LATERAL FIJA)
+ * ============================================================
+ * Barra fija de 270px con efecto glass (backdrop-filter: blur).
+ * z-index alto para superponerse al contenido.
+ * ============================================================
+ */
+.sidebar {
+    width: 270px;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 28px 22px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+/*
+ * Marca / nombre del hotel dentro del sidebar
+ */
+.brand {
+    margin-bottom: 45px;
+}
+
+.brand h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: var(--chalet-brown);
+}
+
+.brand span {
+    color: #7c6f64;
+    font-size: 0.95rem;
+}
+
+/*
+ * ============================================================
+ * MENÚ DE NAVEGACIÓN LATERAL
+ * ============================================================
+ * Enlaces con íconos, efecto hover con desplazamiento a la
+ * derecha y opción activa resaltada con fondo café.
+ * ============================================================
+ */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #5c4b43;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.menu a i {
+    font-size: 1.1rem;
+}
+
+.menu a:hover {
+    background: var(--light-beige);
+    color: var(--chalet-brown);
+    transform: translateX(4px);
+}
+
+.menu a.active {
+    background: var(--chalet-brown);
+    color: white;
+    box-shadow: 0 10px 22px rgba(126, 99, 84, 0.20);
+}
+
+/*
+ * ============================================================
+ * BOTÓN DE CERRAR SESIÓN
+ * ============================================================
+ * Fijo en la parte inferior del sidebar, color naranja para
+ * destacar visualmente como acción de salida.
+ * ============================================================
+ */
+.logout {
+    position: absolute;
+    bottom: 35px;
+    left: 22px;
+    right: 22px;
+}
+
+.logout a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #bc6c25;
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.logout a:hover {
+    background: rgba(188, 108, 37, 0.08);
+}
+
+/*
+ * ============================================================
+ * CONTENIDO PRINCIPAL
+ * ============================================================
+ * margin-left: 270px para compensar el sidebar fijo.
+ * ============================================================
+ */
+.main-content {
+    margin-left: 270px;
+    padding: 40px;
+}
+
+/*
+ * ============================================================
+ * HERO (BANNER SUPERIOR)
+ * ============================================================
+ * Degradado lineal diagonal café con bordes redondeados.
+ * Los pseudo-elementos ::before y ::after crean dos círculos
+ * decorativos semitransparentes para dar profundidad visual.
+ * .hero-content tiene z-index: 2 para estar encima de los
+ * círculos decorativos (que están en posición absoluta).
+ * ============================================================
+ */
+.hero-section {
+    background: linear-gradient(135deg, #7E6354, #988a83);
+    border-radius: 22px;
+    padding: 42px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 25px rgba(126, 99, 84, 0.18);
+}
+
+/* Círculo decorativo superior derecho */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: -80px;
+    right: -80px;
+}
+
+/* Círculo decorativo inferior izquierdo */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    bottom: -60px;
+    left: -60px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    opacity: 0.92;
+    max-width: 700px;
+    margin-bottom: 0;
+    line-height: 1.8;
+}
+
+/*
+ * ============================================================
+ * TARJETAS DE ESTADÍSTICAS (STATS)
+ * ============================================================
+ * Fondo blanco, bordes redondeados, sombra sutil.
+ * Al hacer hover, la tarjeta se eleva 5px (translateY) y la
+ * sombra se intensifica para dar sensación de profundidad.
+ *
+ * .stats-icon: contenedor cuadrado con ícono centrado
+ * .icon-blue/green/purple: colores de fondo para cada ícono
+ * .stats-number: número grande y negrita
+ * .stats-info: texto secundario debajo del número
+ * .positive: resalta texto positivo en color café
+ * ============================================================
+ */
+.stats-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    border: 1px solid #eee7e2;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    transition: 0.3s ease;
+    height: 100%;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(126, 99, 84, 0.10);
+}
+
+.stats-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 22px;
+}
+
+.icon-blue {
+    background: #7E6354;
+}
+
+.icon-green {
+    background: #988a83;
+}
+
+.icon-purple {
+    background: #5c4a41;
+}
+
+.stats-card h6 {
+    color: #7c6f64;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #3e2c23;
+    line-height: 1;
+}
+
+.stats-info {
+    margin-top: 14px;
+    color: #7c6f64;
+    font-size: 0.95rem;
+}
+
+.positive {
+    color: var(--chalet-brown);
+    font-weight: 700;
+}
+
+/*
+ * ============================================================
+ * TARJETA DEL GRÁFICO (CHART.JS)
+ * ============================================================
+ * Contenedor blanco con bordes redondeados para el gráfico
+ * de reservas por mes.
+ *
+ * .chart-header: fila flex con título a la izquierda y badge
+ *   a la derecha. flex-wrap permite que el badge baje de
+ *   línea en pantallas pequeñas.
+ * .chart-title: fuente serif elegante
+ * .chart-badge: píldora con fondo semitransparente café
+ * ============================================================
+ */
+.chart-card {
+    margin-top: 38px;
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 34px;
+    border: 1px solid #eee7e2;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #3e2c23;
+    margin: 0;
+}
+
+.chart-badge {
+    background: rgba(126, 99, 84, 0.10);
+    color: var(--chalet-brown);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/*
+ * ============================================================
+ * RESPONSIVE
+ * ============================================================
+ * 992px: el sidebar se vuelve horizontal (100% ancho),
+ *   el logout deja de estar en posición absoluta,
+ *   el main-content pierde el margin-left.
+ * 768px: reducción de tamaños de fuente y padding
+ *   para pantallas más pequeñas.
+ * ============================================================
+ */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid #ebe5e0;
+    }
+
+    .logout {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-top: 25px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 24px 18px;
+    }
+
+    .hero-section {
+        padding: 30px;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.9rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .chart-card {
+        padding: 24px 18px;
+    }
+
+    .stats-number {
+        font-size: 2rem;
+    }
+}

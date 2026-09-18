@@ -1,0 +1,277 @@
+/*
+ * VARIABLES GLOBALES DE COLOR
+ */
+:root {
+    --chalet-brown: #7E6354;
+    --chalet-hover: #614a3e;
+    --chalet-text: #4a4a4a;
+    --bg-body: #ffffff;
+    --bg-header: #664535;
+    --bg-footer: #000000;
+    --text: #ffffff;
+    --bg-modal: #5c4a41;
+}
+
+/*
+ * ESTILOS DEL CUERPO
+ */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--chalet-text);
+    background-color: var(--bg-body);
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+p, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+}
+
+/*
+ * BARRA DE NAVEGACIÓN
+ */
+.navbar {
+    background-color: var(--bg-header);
+}
+
+.nav-item a {
+    color: var(--text);
+}
+
+.logo img {
+    width: clamp(100px, 20vw, 180px);
+    height: auto;
+}
+
+/*
+ * TÍTULO DE SECCIÓN
+ */
+.section-title {
+    color: var(--chalet-brown);
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+h3, h4 {
+    color: var(--chalet-brown);
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+/*
+ * TABLA PERSONALIZADA
+ */
+.table-chalet {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.table-chalet thead {
+    background-color: var(--chalet-brown);
+    color: #ffffff;
+}
+
+.table-chalet th {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 18px 15px;
+    border: none;
+}
+
+.table-chalet td {
+    vertical-align: middle;
+    padding: 16px 15px;
+    color: var(--chalet-text);
+    border-bottom: 1px solid #eaeaea;
+}
+
+.table-chalet tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+
+.table-chalet tbody tr:hover {
+    background-color: #f5f0ed;
+}
+
+.room-name {
+    font-weight: 600;
+    color: var(--chalet-brown);
+    font-size: 1.1rem;
+}
+
+/*
+ * BOTÓN PERSONALIZADO
+ */
+.btn-chalet {
+    background-color: var(--chalet-brown);
+    color: var(--text);
+    border: none;
+    border-radius: 2px;
+    padding: 10px 24px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-chalet:hover {
+    background-color: var(--chalet-hover);
+    color: white;
+    box-shadow: 0 4px 8px rgba(126, 99, 84, 0.3);
+}
+
+/*
+ * MODAL PERSONALIZADO
+ */
+.modal-header-chalet {
+    border-bottom: 2px solid var(--chalet-brown);
+}
+
+.modal-header-chalet h5 {
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+}
+
+.modal-header-chalet button {
+    color: var(--text);
+}
+
+.modal-title {
+    color: var(--chalet-brown);
+    font-weight: 600;
+}
+
+.form-control:focus {
+    border-color: var(--chalet-brown);
+    box-shadow: 0 0 0 0.25rem rgba(126, 99, 84, 0.25);
+}
+
+/*
+ * SECCIÓN DE INFORMACIÓN
+ */
+.info {
+    background: var(--bg-modal);
+    color: var(--text);
+    min-height: 100%;
+}
+
+.info h2 {
+    font-size: 35px;
+    letter-spacing: 2px;
+}
+
+.titulo {
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 25px;
+}
+
+.info h4 {
+    margin-top: 40px;
+    font-size: 22px;
+}
+
+/*
+ * FORMULARIO
+ */
+.formulario {
+    background: #f2efed;
+}
+
+.formulario h4 {
+    letter-spacing: 2px;
+    color: #8a7f78;
+}
+
+.formulario h1 {
+    color: var(--bg-modal);
+    font-weight: bold;
+}
+
+input,
+textarea {
+    background: #e9e6e4 !important;
+    border: none !important;
+}
+
+input:focus,
+textarea:focus {
+    background: #dedad7 !important;
+    box-shadow: none !important;
+}
+
+button {
+    background: #5c4a41 !important;
+    border: none !important;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #4a3b34 !important;
+}
+
+.modal-header {
+    background: #5c4a41;
+    color: white;
+}
+
+/*
+ * HERO / BANNER PRINCIPAL
+ */
+.contenedorHover {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/img/heroImage.avif');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contenedorTitle {
+    width: 50%;
+    display: flex;
+}
+
+.contenedorTitle h1 {
+    font-size: clamp(1.8rem, 5vw, 4rem);
+    color: white;
+    margin-left: 0.5rem;
+}
+
+.contenedorHover p {
+    color: white;
+    margin-left: 0.5rem;
+}
+
+/*
+ * PIE DE PÁGINA
+ */
+.footer {
+    background-color: var(--bg-footer);
+    margin: 0rem 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/*
+ * RESPONSIVE
+ */
+@media (max-width: 768px) {
+    .info {
+        text-align: center;
+    }
+}

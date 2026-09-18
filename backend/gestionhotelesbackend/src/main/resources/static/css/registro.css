@@ -1,0 +1,151 @@
+/*
+ * ============================================================
+ * VARIABLES GLOBALES DE COLOR
+ * ============================================================
+ */
+:root {
+    --chalet-brown: #7E6354;
+    --chalet-hover: #614a3e;
+    --chalet-text: #4a4a4a;
+    --bg-body: #ffffff;
+    --bg-header: #664535;
+    --bg-footer: #000000;
+    --text: #ffffff;
+    --bg-modal: #5c4a41;
+}
+
+/*
+ * ============================================================
+ * ESTILOS DEL CUERPO
+ * ============================================================
+ * Fuente principal Inter, color de texto café y fondo blanco.
+ * h1-h3 usan Playfair Display (serif elegante) para títulos.
+ * p, h4-h6 usan Inter para legibilidad en textos.
+ * ============================================================
+ */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--chalet-text);
+    background-color: var(--bg-body);
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+p, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+}
+
+/*
+ * ============================================================
+ * BARRA DE NAVEGACIÓN
+ * ============================================================
+ * Fondo del navbar, color de texto de los enlaces y logo
+ * responsive con clamp().
+ * ============================================================
+ */
+.navbar {
+    background-color: var(--bg-header);
+}
+
+.nav-item a {
+    color: var(--text);
+}
+
+.logo img {
+    width: clamp(100px, 20vw, 180px);
+    height: auto;
+}
+
+/*
+ * ============================================================
+ * CAMPOS DE FORMULARIO
+ * ============================================================
+ * Inputs y textareas con fondo gris claro (#e9e6e4) y sin
+ * bordes. !important para sobrescribir estilos de Bootstrap.
+ * ============================================================
+ */
+input,
+textarea {
+    background: #e9e6e4 !important;
+    border: none !important;
+}
+
+/*
+ * ============================================================
+ * BOTONES
+ * ============================================================
+ * Fondo café oscuro sin bordes, con transición suave de 0.3s
+ * al hacer hover se oscurecen ligeramente.
+ * ============================================================
+ */
+button {
+    background: #5c4a41 !important;
+    border: none !important;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #4a3b34 !important;
+}
+
+/*
+ * ============================================================
+ * PIE DE PÁGINA
+ * ============================================================
+ * Fondo personalizado, bordes redondeados y márgenes laterales
+ * para separar visualmente del contenido.
+ * ============================================================
+ */
+.footer {
+    background-color: var(--bg-footer);
+    margin: 0rem 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control.is-invalid {
+    border: 2px solid #dc3545 !important;
+    background: #fff !important;
+}
+
+.invalid-feedback {
+    font-size: 0.85rem;
+    color: #dc3545;
+    display: block;
+    margin-top: 4px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none !important;
+    background: transparent !important;
+    z-index: 5;
+    padding: 6px 10px;
+    font-size: 1.2rem;
+    color: var(--chalet-brown);
+    cursor: pointer;
+}
+
+.toggle-password:hover {
+    color: var(--chalet-hover) !important;
+    background: transparent !important;
+}
+
+/*
+ * ============================================================
+ * RESPONSIVE
+ * ============================================================
+ * En pantallas de 768px o menos, centra el texto de los
+ * elementos con clase .info para mejor lectura en móvil.
+ * ============================================================
+ */
+@media (max-width: 768px) {
+    .info {
+        text-align: center;
+    }
+}
