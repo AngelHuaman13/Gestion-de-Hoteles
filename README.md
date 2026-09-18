@@ -1,8 +1,8 @@
-# 🏨 Gestión de Hoteles
+#  Gestión de Hoteles
 
 Un sistema completo de gestión hotelera desarrollado con **Spring Boot** que permite administrar reservas, huéspedes, habitaciones y más.
 
-## 📋 Descripción del Proyecto
+##  Descripción del Proyecto
 
 Esta aplicación proporciona una solución integral para la administración de hoteles, permitiendo:
 - ✅ Gestión de habitaciones y categorías
@@ -13,7 +13,7 @@ Esta aplicación proporciona una solución integral para la administración de h
 
 ---
 
-## 👥 Equipo de Desarrollo
+##  Equipo de Desarrollo
 
 | Integrante | GitHub | Rol |
 |-----------|--------|-----|
@@ -25,7 +25,7 @@ Esta aplicación proporciona una solución integral para la administración de h
 
 ---
 
-## 📚 Código Compartido (Gists)
+##  Código Compartido (Gists)
 
 ### Entidades principales
 - **HotelController.java** → [Ver Gist](https://gist.github.com/Ashi-Games/0990f54d637def1173ef1e2202d880dc) (Ashi-Games)
@@ -35,7 +35,7 @@ Esta aplicación proporciona una solución integral para la administración de h
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 ### Backend
 - **Java 11+**
@@ -57,7 +57,7 @@ Esta aplicación proporciona una solución integral para la administración de h
 
 ---
 
-## 📦 Dependencias Principales
+##  Dependencias Principales
 
 Las dependencias que usaremos en `pom.xml`:
 
@@ -96,7 +96,7 @@ Las dependencias que usaremos en `pom.xml`:
 
 ---
 
-## 📋 Requisitos Previos
+##  Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado:
 
@@ -117,7 +117,7 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ---
 
-## ⚙️ Instalación
+##  Instalación
 
 ### 1. Clonar el repositorio
 ```bash
@@ -139,7 +139,7 @@ La aplicación estará disponible en: `http://localhost:8080`
 
 ---
 
-## 📁 Estructura del Proyecto
+##  Estructura del Proyecto
 
 ```
 Gestion-de-Hoteles/
@@ -164,7 +164,7 @@ Gestion-de-Hoteles/
 
 ---
 
-## 🚀 Endpoints principales
+##  Endpoints principales
 
 ### Habitaciones
 - `GET /api/habitaciones` - Obtener todas las habitaciones
@@ -181,15 +181,15 @@ Gestion-de-Hoteles/
 
 ---
 
-## 📚 Fases del Proyecto
+##  Fases del Proyecto
 
-### ✅ Fase 1 (Completada)
+###  Fase 1 (Completada)
 - Git workflow (branches, commits, merges, tags, releases)
 - GitHub Projects (Road Map + Kanban)
 - Estructura base del proyecto
 - Integrantes asignados
 
-### 📋 Fase 2 (Próximo Avance)
+###  Fase 2 (Próximo Avance)
 - Configuración de Base de Datos MySQL
 - Entidades JPA completas
 - Repositorios y Services
@@ -197,7 +197,7 @@ Gestion-de-Hoteles/
 
 ---
 
-## 👥 Contribuir
+##  Contribuir
 
 1. Haz un Fork del proyecto
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
@@ -207,20 +207,20 @@ Gestion-de-Hoteles/
 
 ---
 
-## 📄 Licencia
+##  Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
 
 ---
 
-## 📧 Contacto
+##  Contacto
 
 **Líder del Proyecto:** Angel Oscar Moscoso Huaman  
 **GitHub:** [@AngelHuaman13](https://github.com/AngelHuaman13)
 
 ---
 
-## 📚 Recursos Útiles
+##  Recursos Útiles
 
 - [Documentación Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
