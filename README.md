@@ -2,6 +2,8 @@
 
 Un sistema completo de gestión hotelera desarrollado con **Spring Boot** que permite administrar reservas, huéspedes, habitaciones y más.
 
+Accede a la aplicación en línea: https://gestion-de-hoteles-2.onrender.com/
+
 ##  Descripción del Proyecto
 
 Esta aplicación proporciona una solución integral para la administración de hoteles, permitiendo:
@@ -38,7 +40,7 @@ Esta aplicación proporciona una solución integral para la administración de h
 ##  Tecnologías Utilizadas
 
 ### Backend
-- **Java 11+**
+- **Java 17+**
 - **Spring Boot 3.x** - Framework principal
 - **Spring Data JPA** - Persistencia de datos
 - **Spring Security** - Autenticación y autorización
@@ -100,7 +102,7 @@ Las dependencias que usaremos en `pom.xml`:
 
 Antes de comenzar, asegúrate de tener instalado:
 
-- **Java JDK 11 o superior**
+- **Java JDK 17 o superior**
   ```bash
   java -version
   ```
