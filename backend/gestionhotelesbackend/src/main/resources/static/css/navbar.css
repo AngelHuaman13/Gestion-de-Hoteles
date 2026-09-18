@@ -1,0 +1,82 @@
+:root {
+    --bg-header: #664535;
+    --bg-footer: #000000;
+    --bg-header-hover: #7E6354;
+    --text-nav: #ffffff;
+    --nav-radius: 10px;
+}
+
+.navbar {
+    background-color: var(--bg-header);
+    padding: 10px 0;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-brand img {
+    width: clamp(100px, 18vw, 160px);
+    height: auto;
+}
+
+.nav-link {
+    color: var(--text-nav) !important;
+    font-weight: 500;
+    padding: 8px 18px !important;
+    border-radius: var(--nav-radius);
+    transition: background 0.2s, color 0.2s;
+    font-size: 0.95rem;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--text-nav) !important;
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.22);
+    font-weight: 700;
+}
+
+.nav-item .nav-link.text-danger {
+    color: #f8d7da !important;
+}
+
+.nav-item .nav-link.text-danger:hover {
+    background: rgba(220, 53, 69, 0.2);
+    color: #fff !important;
+}
+
+.nav-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-nav);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    white-space: nowrap;
+}
+
+.nav-user i {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar-toggler-icon {
+    filter: brightness(10);
+}
+
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        padding: 10px 0;
+    }
+    .nav-link {
+        padding: 10px 18px !important;
+    }
+    .nav-user {
+        padding: 10px 18px;
+    }
+}

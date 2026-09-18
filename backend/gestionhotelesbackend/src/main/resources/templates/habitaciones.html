@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habitaciones - GestionHoteles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link th:href="@{/css/navbar.css}" rel="stylesheet">
+    <link th:href="@{/css/habitaciones.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100" style="background:#f8f6f4;">
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="container py-4 py-md-5">
+
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold" style="color:#4a3b34; font-family:'Playfair Display',serif;">
+                Nuestras Habitaciones
+            </h2>
+            <p class="text-muted fs-5" style="max-width:600px; margin:0 auto;">
+                Cada espacio ha sido diseñado para ofrecerte una experiencia única de confort y elegancia
+            </p>
+        </div>
+
+        <!-- ============================================================
+             FILTROS
+             ============================================================ -->
+        <div class="filtros-bar">
+            <div class="row g-3 align-items-end">
+
+                <!-- Ordenar por precio -->
+                <div class="col-md-3">
+                    <label class="filtro-label"><i class="bi bi-sort-numeric-down me-1"></i>Ordenar</label>
+                    <select id="sortPrice" class="form-select filtro-select" onchange="aplicarFiltros()">
+                        <option value="">Por defecto</option>
+                        <option value="asc">Menor precio</option>
+                        <option value="desc">Mayor precio</option>
+                    </select>
+                </div>
+
+                <!-- Tipo de habitación -->
+                <div class="col-md-3">
+                    <label class="filtro-label"><i class="bi bi-door-open me-1"></i>Tipo</label>
+                    <select id="filterType" class="form-select filtro-select" onchange="aplicarFiltros()">
+                        <option value="">Todos</option>
+                        <option value="Individual">Individual</option>
+                        <option value="Doble">Doble</option>
+                        <option value="Suite">Suite</option>
+                        <option value="Familiar">Familiar</option>
+                    </select>
+                </div>
+
+                <!-- Rango de precio -->
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="filtro-label mb-0"><i class="bi bi-currency-dollar me-1"></i>Precio máximo</label>
+                        <span class="filtro-precio-valor" id="priceLabel">S/ 200</span>
+                    </div>
+                    <input type="range" id="priceRange" class="filtro-range"
+                           min="0" max="300" value="300" step="10"
+                           oninput="aplicarFiltros()">
+                    <div class="d-flex justify-content-between small text-muted px-1">
+                        <span>S/ 0</span>
+                        <span>S/ 300</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ============================================================
+             CONTADOR DE RESULTADOS
+             ============================================================ -->
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+            <p class="mb-0 text-muted" id="resultCount">Mostrando todas las habitaciones</p>
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                    onclick="limpiarFiltros()" id="limpiarBtn" style="display:none;">
+                <i class="bi bi-x-circle me-1"></i>Limpiar filtros
+            </button>
+        </div>
+
+        <!-- ============================================================
+             GRID DE HABITACIONES
+             ============================================================ -->
+        <div class="row g-4" id="habitacionesGrid"
+             th:if="${not #lists.isEmpty(habitaciones)}">
+
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 hab-card-wrapper"
+                 th:each="hab : ${habitaciones}"
+                 th:data-tipo="${hab.tipo}"
+                 th:data-precio="${hab.precio}">
+
+                <div class="card hab-card h-100 border-0">
+                    <div class="hab-card-img-wrap">
+                        <img th:src="@{${hab.url}}"
+                             class="hab-card-img"
+                             alt="Habitación"
+                             loading="lazy"
+                             onerror="this.src='/img/habitacion-default.jpg'; this.style.objectFit='contain'; this.style.padding='20px'">
+                        <div class="hab-card-overlay"></div>
+                        <span class="hab-card-precio-badge">
+                            S/ <span th:text="${hab.precio}">0</span>
+                            <small>/noche</small>
+                        </span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="hab-card-tipo" th:text="${hab.tipo}">Suite</h5>
+                        <p class="hab-card-descripcion flex-grow-1" th:text="${hab.descripcion}">
+                            Descripción de la habitación.
+                        </p>
+                        <a th:href="@{/reserva/{id}(id=${hab.id})}"
+                           class="btn hab-card-btn w-100">
+                            <i class="bi bi-calendar-check me-1"></i>Reservar Ahora
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Empty state -->
+        <div class="text-center py-5" id="emptyState" style="display:none;">
+            <i class="bi bi-search" style="font-size:3rem; color:#c4b5a5;"></i>
+            <h4 class="mt-3" style="color:#4a3b34;">No se encontraron habitaciones</h4>
+            <p class="text-muted">Intenta ajustar los filtros para ver más resultados</p>
+            <button class="btn btn-outline-secondary rounded-pill px-4" onclick="limpiarFiltros()">
+                Limpiar filtros
+            </button>
+        </div>
+
+        <!-- Empty state server-side (sin datos) -->
+        <div class="alert alert-warning text-center mt-4"
+             th:if="${#lists.isEmpty(habitaciones)}">
+            😕 No hay habitaciones disponibles en este momento.
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', aplicarFiltros);
+
+    function aplicarFiltros() {
+        const sortVal = document.getElementById('sortPrice').value;
+        const typeVal = document.getElementById('filterType').value.toLowerCase();
+        const maxPrice = parseFloat(document.getElementById('priceRange').value);
+
+        document.getElementById('priceLabel').textContent = 'S/ ' + maxPrice;
+
+        const grid = document.getElementById('habitacionesGrid');
+        if (!grid) return;
+
+        const wrappers = Array.from(grid.querySelectorAll('.hab-card-wrapper'));
+        let visibles = [];
+
+        wrappers.forEach(w => {
+            const tipo = (w.dataset.tipo || '').toLowerCase();
+            const precio = parseFloat(w.dataset.precio) || 0;
+
+            const pasaTipo = !typeVal || tipo === typeVal;
+            const pasaPrecio = precio <= maxPrice;
+
+            w.style.display = (pasaTipo && pasaPrecio) ? '' : 'none';
+
+            if (pasaTipo && pasaPrecio) {
+                visibles.push({ el: w, precio });
+            }
+        });
+
+        // Ordenar
+        if (sortVal === 'asc') {
+            visibles.sort((a, b) => a.precio - b.precio);
+        } else if (sortVal === 'desc') {
+            visibles.sort((a, b) => b.precio - a.precio);
+        }
+
+        if (sortVal) {
+            visibles.forEach(item => grid.appendChild(item.el));
+        }
+
+        // Contador
+        const total = wrappers.length;
+        const count = document.getElementById('resultCount');
+        if (visibles.length === total) {
+            count.textContent = 'Mostrando todas las habitaciones';
+        } else {
+            count.textContent = 'Mostrando ' + visibles.length + ' de ' + total + ' habitaciones';
+        }
+
+        // Botón limpiar
+        document.getElementById('limpiarBtn').style.display =
+            (typeVal || sortVal || maxPrice < 300) ? '' : 'none';
+
+        // Empty state
+        const empty = document.getElementById('emptyState');
+        empty.style.display = (visibles.length === 0) ? '' : 'none';
+    }
+
+    function limpiarFiltros() {
+        document.getElementById('sortPrice').value = '';
+        document.getElementById('filterType').value = '';
+        document.getElementById('priceRange').value = 300;
+        aplicarFiltros();
+    }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

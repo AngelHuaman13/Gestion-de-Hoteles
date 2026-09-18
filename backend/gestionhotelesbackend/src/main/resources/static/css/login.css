@@ -1,0 +1,147 @@
+/*
+ * VARIABLES GLOBALES DE COLOR
+ * ============================
+ * :root define variables CSS reutilizables en todo el documento.
+ * Esto permite mantener una paleta de colores consistente y
+ * facilitar cambios futuros desde un solo lugar.
+ */
+:root {
+    --chalet-brown: #7E6354;   /* Color café principal (botones, títulos, acentos) */
+    --chalet-hover: #614a3e;   /* Café más oscuro para el efecto hover de botones */
+    --chalet-text: #4a4a4a;    /* Color del texto general del cuerpo */
+    --bg-body: #ffffff;        /* Fondo blanco del cuerpo de la página */
+    --bg-header: #664535;
+    --bg-footer: #000000;     /* Fondo del pie de página */
+    --text: #ffffff;           /* Color del texto cuando está sobre fondo oscuro */
+    --bg-modal: #5c4a41;       /* Fondo de ventanas modales */
+}
+
+/*
+ * ESTILOS DEL CUERPO
+ * ===================
+ * Aplica la fuente principal (Inter) a todo el cuerpo,
+ * define el color del texto y el fondo general.
+ */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--chalet-text);
+    background-color: var(--bg-body);
+}
+
+/*
+ * TÍTULOS PRINCIPALES
+ * ====================
+ * h1, h2, h3 usan una fuente serif elegante (Playfair Display)
+ * para dar un toque más formal y distintivo a los encabezados.
+ */
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+/*
+ * TÍTULOS SECUNDARIOS Y PÁRRAFOS
+ * ================================
+ * Los textos más pequeños mantienen la fuente Inter para
+ * asegurar legibilidad en bloques largos de texto.
+ */
+p, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+}
+
+/*
+ * BARRA DE NAVEGACIÓN
+ * ====================
+ * Fondo personalizado y color de texto blanco para los enlaces.
+ */
+.navbar {
+    background-color: var(--bg-header);
+}
+
+.nav-item a {
+    color: var(--text);
+}
+
+/*
+ * LOGO
+ * ====
+ * clamp() hace que el logo sea responsive:
+ * - Mínimo 100px en pantallas pequeñas
+ * - 20% del ancho de la ventana como valor ideal
+ * - Máximo 180px en pantallas grandes
+ */
+.logo img {
+    width: clamp(100px, 20vw, 180px);
+    height: auto;
+}
+
+/*
+ * CAMPOS DE FORMULARIO
+ * =====================
+ * Fondo gris claro sin bordes para inputs y textareas.
+ * Se usa !important para sobrescribir estilos de Bootstrap.
+ */
+input,
+textarea {
+    background: #e9e6e4 !important;
+    border: none !important;
+}
+
+/*
+ * BOTONES
+ * =======
+ * Color café sólido sin bordes, con transición suave
+ * al cambiar de estado (hover, active).
+ */
+button {
+    background: #5c4a41 !important;
+    border: none !important;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #4a3b34 !important;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none !important;
+    background: transparent !important;
+    z-index: 5;
+    padding: 6px 10px;
+    font-size: 1.2rem;
+    color: var(--chalet-brown);
+    cursor: pointer;
+}
+
+.toggle-password:hover {
+    color: var(--chalet-hover) !important;
+    background: transparent !important;
+}
+
+/*
+ * PIE DE PÁGINA
+ * ==============
+ * Fondo personalizado, bordes redondeados y márgenes
+ * laterales para separarlo visualmente de los bordes.
+ */
+.footer {
+    background-color: var(--bg-footer);
+    margin: 0rem 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/*
+ * RESPONSIVE: PANTALLAS PEQUEÑAS
+ * ===============================
+ * En dispositivos de 768px o menos, centra el texto
+ * de los elementos con clase .info para mejor lectura.
+ */
+@media (max-width: 768px) {
+    .info {
+        text-align: center;
+    }
+}

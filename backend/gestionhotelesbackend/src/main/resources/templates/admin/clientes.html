@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Lotus Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link th:href="@{/css/admin-clientes.css}" rel="stylesheet">
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand">
+        <h2>Royal Sayariy</h2>
+        <span>Panel administrativo</span>
+    </div>
+    <div class="menu">
+        <a th:href="@{/admin/dashboard}"><i class="bi bi-grid-fill"></i>Dashboard</a>
+        <a th:href="@{/admin/reservas}"><i class="bi bi-calendar-check-fill"></i>Reservas</a>
+        <a th:href="@{/admin/habitaciones}"><i class="bi bi-door-open-fill"></i>Habitaciones</a>
+        <a th:href="@{/admin/clientes}" class="active"><i class="bi bi-people-fill"></i>Clientes</a>
+        <a th:href="@{/admin/flujo-caja}"><i class="bi bi-cash-stack"></i>Flujo de Caja</a>
+    </div>
+    <div class="logout">
+        <a th:href="@{/logout}"><i class="bi bi-box-arrow-left"></i>Cerrar Sesión</a>
+    </div>
+</aside>
+
+<main class="main-content">
+
+    <section class="hero-section">
+        <div class="hero-content d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="hero-title">Clientes</h1>
+                <p class="hero-subtitle">Administra los clientes registrados en el hotel.</p>
+            </div>
+            <button type="button" class="btn-dashboard" data-bs-toggle="modal" data-bs-target="#nuevoModal">
+                <i class="bi bi-person-plus-fill"></i> Nuevo Cliente
+            </button>
+        </div>
+    </section>
+
+    <div class="px-3 mb-3" th:if="${success}">
+        <div class="alert alert-success alert-dismissible fade show mb-0 d-flex align-items-center gap-2" style="border-radius:12px;">
+            <i class="bi bi-check-circle-fill"></i>
+            <span th:text="${success}">Éxito</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <div class="px-3 mb-3" th:if="${error}">
+        <div class="alert alert-danger alert-dismissible fade show mb-0 d-flex align-items-center gap-2" style="border-radius:12px;">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span th:text="${error}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+
+    <div th:if="${clientePassword != null}" class="px-3 mb-3">
+        <div class="alert alert-info alert-dismissible fade show mb-0" style="border-radius:12px;border-left:4px solid var(--chalet-brown);">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-key-fill fs-5" style="color:var(--chalet-brown);"></i>
+                <strong style="color:var(--chalet-brown);">Contraseña generada para <span th:text="${clienteNombre}">Cliente</span></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div class="password-box">
+                <div class="password-label">Contraseña temporal</div>
+                <div class="password-value" th:text="${clientePassword}">abc12345</div>
+                <small class="text-muted mt-2 d-block">Entréguela al cliente. Podrá cambiarla desde "Mi Perfil".</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 px-3">
+        <input type="text" id="buscarInput" class="form-control" placeholder="Buscar cliente por nombre, email o teléfono..." onkeyup="filtrarTabla()">
+    </div>
+
+    <div class="table-container" th:if="${not #lists.isEmpty(clientes)}">
+        <div class="table-responsive">
+            <table class="custom-table align-middle">
+                <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Tel&eacute;fono</th>
+                    <!-- <th class="text-center">Contrase&ntilde;a</th> -->
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cli : ${clientes}"
+                    th:data-id="${cli.id}"
+                    th:data-nombre="${cli.nombre}"
+                    th:data-email="${cli.email}"
+                    th:data-telefono="${cli.telefono}"
+                    th:data-bloqueado="${clientesConReservas.contains(cli.id)}">
+                    <td class="fw-bold text-center" th:text="${cli.id}">1</td>
+                    <td class="fw-semibold text-center" th:text="${cli.nombre}">Nombre</td>
+                    <td class="text-center" th:text="${cli.email}">email@correo.com</td>
+                    <td class="text-center">
+                        <span th:if="${cli.telefono != null and !cli.telefono.isEmpty()}" th:text="${cli.telefono}">999888777</span>
+                        <span th:unless="${cli.telefono != null and !cli.telefono.isEmpty()}" class="text-muted">&mdash;</span>
+                    </td>
+                    <!-- 
+                    <td class="text-center">
+                        <code style="background:#f5f0ed;padding:4px 10px;border-radius:8px;font-size:0.85rem;color:var(--chalet-brown);"
+                              th:text="${cli.password}">123456</code>
+                    </td>
+                     -->
+                    <td class="text-center">
+                        <div class="action-buttons">
+                            <button type="button" class="btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editarModal"
+                                    th:data-id="${cli.id}" th:data-nombre="${cli.nombre}" th:data-email="${cli.email}" th:data-telefono="${cli.telefono}">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </button>
+                            <button type="button" class="btn-action btn-delete"
+                                    th:classappend="${clientesConReservas.contains(cli.id)} ? disabled : ''"
+                                    th:disabled="${clientesConReservas.contains(cli.id)}"
+                                    th:data-bloqueado="${clientesConReservas.contains(cli.id)}"
+                                    data-bs-toggle="modal" data-bs-target="#eliminarModal"
+                                    th:data-id="${cli.id}" th:data-nombre="${cli.nombre}"
+                                    th:title="${clientesConReservas.contains(cli.id)} ? 'Tiene reservas activas o pendientes' : 'Eliminar cliente'">
+                                <i class="bi bi-trash-fill"></i> Eliminar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(clientes)}">
+        <i class="bi bi-people"></i>
+        <h3>No hay clientes registrados</h3>
+        <p>Los clientes aparecerán aquí cuando se registren o se creen desde el panel.</p>
+    </div>
+
+</main>
+
+<!-- Modal: Nuevo Cliente -->
+<div class="modal fade" id="nuevoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;border:none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" style="color:var(--chalet-brown);">
+                    <i class="bi bi-person-plus-fill me-2"></i>Nuevo Cliente
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/admin/cliente/crear}" method="post">
+                <div class="modal-body pt-3">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input type="text" name="nombre" class="form-control" required maxlength="100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tel&eacute;fono</label>
+                        <input type="text" name="telefono" class="form-control" placeholder="999888777" maxlength="9">
+                    </div>
+                    <div class="alert alert-info d-flex align-items-center gap-2 mb-0" style="border-radius:12px;">
+                        <i class="bi bi-key-fill"></i>
+                        <small>Se generar&aacute; una contrase&ntilde;a temporal autom&aacute;ticamente.</small>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius:999px;padding:8px 24px;">Cancelar</button>
+                    <button type="submit" class="btn btn-success" style="border-radius:999px;padding:8px 24px;">
+                        <i class="bi bi-check-circle me-1"></i>Crear Cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Editar Cliente -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;border:none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" style="color:var(--chalet-brown);">
+                    <i class="bi bi-pencil-square me-2"></i>Editar Cliente
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/admin/cliente/actualizar}" method="post">
+                <input type="hidden" name="id" id="editId">
+                <div class="modal-body pt-3">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input type="text" name="nombre" id="editNombre" class="form-control" required maxlength="100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" id="editEmail" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tel&eacute;fono</label>
+                        <input type="text" name="telefono" id="editTelefono" class="form-control" placeholder="999888777" maxlength="9">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius:999px;padding:8px 24px;">Cancelar</button>
+                    <button type="submit" class="btn btn-success" style="border-radius:999px;padding:8px 24px;">
+                        <i class="bi bi-check-circle me-1"></i>Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Eliminar Cliente -->
+<div class="modal fade" id="eliminarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;border:none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="eliminarModalLabel" style="color:var(--chalet-brown);">
+                    <i class="bi bi-exclamation-triangle-fill me-2" style="color:#b91c1c;"></i>
+                    Confirmar eliminaci&oacute;n
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <p id="eliminarMensaje">¿Est&aacute; seguro de eliminar a <strong id="eliminarNombre">—</strong>?</p>
+                <div id="eliminarBloqueado" class="alert alert-warning d-flex align-items-center gap-2 mb-0" style="border-radius:12px;display:none;">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <span>Nota: no puede eliminar clientes con reservas activas o pendientes.</span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius:999px;padding:8px 24px;">Cancelar</button>
+                <a id="confirmEliminarBtn" href="#" class="btn btn-danger" style="border-radius:999px;padding:8px 24px;">
+                    <i class="bi bi-trash-fill me-1"></i>Eliminar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filtrarTabla() {
+    const input = document.getElementById('buscarInput').value.toLowerCase();
+    document.querySelectorAll('.table-container tbody tr').forEach(fila => {
+        fila.style.display = fila.textContent.toLowerCase().includes(input) ? '' : 'none';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal editar: llenar datos
+    const editarModal = document.getElementById('editarModal');
+    if (editarModal) {
+        editarModal.addEventListener('show.bs.modal', function(event) {
+            const btn = event.relatedTarget;
+            document.getElementById('editId').value = btn.getAttribute('data-id');
+            document.getElementById('editNombre').value = btn.getAttribute('data-nombre');
+            document.getElementById('editEmail').value = btn.getAttribute('data-email');
+            document.getElementById('editTelefono').value = btn.getAttribute('data-telefono');
+        });
+    }
+
+    // Modal eliminar: verificar bloqueo y mostrar nombre
+    const eliminarModal = document.getElementById('eliminarModal');
+    if (eliminarModal) {
+        eliminarModal.addEventListener('show.bs.modal', function(event) {
+            const btn = event.relatedTarget;
+            const id = btn.getAttribute('data-id');
+            const nombre = btn.getAttribute('data-nombre');
+            const bloqueado = btn.getAttribute('data-bloqueado') === 'true';
+
+            document.getElementById('eliminarNombre').textContent = nombre;
+            document.getElementById('eliminarMensaje').style.display = bloqueado ? 'none' : '';
+            document.getElementById('eliminarBloqueado').style.display = bloqueado ? 'flex' : 'none';
+            const confirmBtn = document.getElementById('confirmEliminarBtn');
+            if (bloqueado) {
+                confirmBtn.style.display = 'none';
+            } else {
+                confirmBtn.style.display = 'inline-flex';
+                confirmBtn.href = '/admin/cliente/eliminar/' + id;
+            }
+        });
+    }
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

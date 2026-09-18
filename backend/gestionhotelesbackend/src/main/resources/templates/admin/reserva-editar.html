@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!--
+  xmlns:th="http://www.thymeleaf.org"
+  → Habilita las directivas Thymeleaf en el HTML.
+    Sin esto, las etiquetas "th:*" no se procesan.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Reserva - Lotus Admin</title>
+
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons (CDN) → íconos para inputs y botones -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts → Inter (fuente principal) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link th:href="@{/css/admin-reserva-editar.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
+</head>
+
+<body>
+
+<!--
+  CÍRCULOS DECORATIVOS DE FONDO (BLUR)
+  Son elementos puramente estéticos (clases blur-circle, blur-1, blur-2).
+  No usan Thymeleaf.
+-->
+<div class="blur-circle blur-1"></div>
+<div class="blur-circle blur-2"></div>
+
+<!-- ============================================================
+     CONTENEDOR PRINCIPAL
+     ============================================================ -->
+<div class="main-wrapper">
+
+    <!--
+      TARJETA DE EDICIÓN (EDIT CARD)
+      Contiene el formulario para modificar una reserva existente.
+    -->
+    <div class="edit-card">
+
+        <!-- ====================================================
+             ENCABEZADO DE LA TARJETA
+             ==================================================== -->
+        <div class="header-section">
+
+            <!-- Ícono decorativo (lápiz) -->
+            <div class="icon-wrapper">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+
+            <!--
+              Título dinámico:
+              th:text="${reserva.id}"
+              → Muestra el número de reserva que se está editando.
+                El objeto "reserva" viene desde el controlador
+                (AdminController.editarReserva()) cargado en el Model.
+            -->
+            <h1>
+                Editar Reserva
+                #<span th:text="${reserva.id}">1</span>
+            </h1>
+
+            <p>
+                Actualiza la información de la reserva y mantén el control total
+                de la gestión hotelera.
+            </p>
+
+        </div>
+
+        <!-- Caja informativa (dinámica según estado) -->
+        <div class="status-info"
+             th:classappend="${reserva.estado == 'COMPLETADA' or reserva.estado == 'CANCELADA'} ? 'readonly' : ''">
+            <div th:if="${reserva.estado == 'PENDIENTE'}">
+                <strong>Reserva pendiente:</strong>
+                puedes modificar todos los campos de la reserva.
+            </div>
+            <div th:if="${reserva.estado == 'ACTIVA'}">
+                <strong>Reserva activa:</strong>
+                solo puedes modificar la fecha de salida y el estado.
+                <span class="text-muted small d-block mt-1">La habitación y la fecha de entrada no se pueden cambiar.</span>
+            </div>
+            <div th:if="${reserva.estado == 'COMPLETADA' or reserva.estado == 'CANCELADA'}">
+                <strong>Reserva <span th:text="${#strings.toLowerCase(reserva.estado)}">completada</span>:</strong>
+                vista informativa — no se pueden realizar modificaciones.
+            </div>
+        </div>
+
+        <!-- ====================================================
+             FORMULARIO DE EDICIÓN
+             ====================================================
+             th:action="@{/admin/reserva/actualizar}"
+             → Envía los datos al endpoint POST del AdminController
+               que procesa la actualización.
+
+             method="post"
+             → Usamos POST porque Thymeleaf no soporta PUT en formularios HTML.
+               El controlador lo recibe con @PostMapping.
+        -->
+        <form th:action="@{/admin/reserva/actualizar}" method="post">
+
+            <!--
+              Campo oculto con el ID de la reserva.
+              th:value="${reserva.id}"
+              → Envía el ID al controlador para identificar qué reserva actualizar.
+                El atributo "name" debe coincidir con @RequestParam del controlador.
+            -->
+            <input type="hidden"
+                   name="id"
+                   th:value="${reserva.id}">
+
+            <!-- Hidden input para habitacionId cuando el select está disabled (ACTIVA) -->
+            <input type="hidden" name="habitacionId"
+                   th:value="${reserva.habitacion.id}"
+                   th:if="${reserva.estado == 'ACTIVA'}">
+
+            <!-- ================================================
+                 CAMPO: HABITACIÓN (SELECT)
+                 ================================================ -->
+            <div class="mb-4">
+
+                <label for="habitacionId" class="form-label">
+                    Habitación
+                </label>
+
+                <div class="input-group-custom">
+                    <i class="bi bi-door-open-fill"></i>
+
+                    <select id="habitacionId"
+                            name="habitacionId"
+                            class="form-select"
+                            required
+                            th:disabled="${reserva.estado == 'ACTIVA' or reserva.estado == 'COMPLETADA' or reserva.estado == 'CANCELADA'}">
+
+                        <option th:each="hab : ${habitaciones}"
+                                th:value="${hab.id}"
+                                th:text="${hab.tipo} + ' - S/ ' + ${hab.precio}"
+                                th:selected="${hab.id == reserva.habitacion.id}">
+                        </option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- ================================================
+                 CAMPO: FECHA DE ENTRADA (CHECK-IN)
+                 ================================================ -->
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Fecha de Entrada
+                </label>
+
+                <div class="input-group-custom">
+                    <i class="bi bi-calendar-event-fill"></i>
+
+                    <input type="text" id="fechaInicioPicker" class="form-control flatpickr-input"
+                           placeholder="Seleccionar fecha..."
+                           th:value="${#temporals.format(reserva.fechaInicio, 'dd/MM/yyyy')}"
+                           th:disabled="${reserva.estado == 'ACTIVA' or reserva.estado == 'COMPLETADA' or reserva.estado == 'CANCELADA'}">
+                    <input type="hidden" name="fechaInicio" id="fechaInicio"
+                           th:value="${reserva.fechaInicio}">
+                </div>
+
+            </div>
+
+            <!-- ================================================
+                 CAMPO: FECHA DE SALIDA (CHECK-OUT)
+                 ================================================ -->
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Fecha de Salida
+                </label>
+
+                <div class="input-group-custom">
+                    <i class="bi bi-calendar2-check-fill"></i>
+
+                    <input type="text" id="fechaFinPicker" class="form-control flatpickr-input"
+                           placeholder="Seleccionar fecha..."
+                           th:value="${#temporals.format(reserva.fechaFin, 'dd/MM/yyyy')}"
+                           th:disabled="${reserva.estado == 'COMPLETADA' or reserva.estado == 'CANCELADA'}">
+                    <input type="hidden" name="fechaFin" id="fechaFin"
+                           th:value="${reserva.fechaFin}">
+                </div>
+
+            </div>
+
+            <!-- ================================================
+                 CAMPO: ESTADO DE LA RESERVA (SELECT)
+                 ================================================
+                 Cada <option> usa th:selected para marcar la opción
+                 que coincide con el estado actual de la reserva.
+            -->
+            <div class="mb-4">
+
+                <label for="estado" class="form-label">
+                    Estado de la Reserva
+                </label>
+
+                <div class="input-group-custom">
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    <select id="estado"
+                            name="estado"
+                            class="form-select"
+                            required
+                            th:disabled="${reserva.estado == 'COMPLETADA' or reserva.estado == 'CANCELADA'}">
+
+                        <!--
+                          th:selected="${reserva.estado == 'ACTIVA'}"
+                          → Compara el estado actual de la reserva con "ACTIVA".
+                            Si es igual, marca este <option> como seleccionado.
+                        -->
+                        <option value="ACTIVA"
+                                th:selected="${reserva.estado == 'ACTIVA'}">
+                            ACTIVA
+                        </option>
+
+                        <option value="PENDIENTE"
+                                th:selected="${reserva.estado == 'PENDIENTE'}"
+                                th:if="${reserva.estado != 'ACTIVA'}">
+                            PENDIENTE
+                        </option>
+
+                        <option value="COMPLETADA"
+                                th:selected="${reserva.estado == 'COMPLETADA'}">
+                            COMPLETADA
+                        </option>
+
+                        <option value="CANCELADA"
+                                th:selected="${reserva.estado == 'CANCELADA'}"
+                                th:if="${reserva.estado != 'ACTIVA'}">
+                            CANCELADA
+                        </option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Advertencia: cargo extra al extender fecha de salida -->
+            <div id="cargoExtraWarning"
+                 class="alert alert-warning d-none"
+                 style="border-radius:12px; margin-bottom:0;">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span id="cargoExtraText">Se generará un cargo extra por noches adicionales.</span>
+            </div>
+
+            <!-- ================================================
+                 BOTONES DE ACCIÓN
+                 ================================================ -->
+            <div class="d-grid gap-3 mt-4">
+
+                <!-- Botón de guardar (solo visible si no es COMPLETADA/CANCELADA) -->
+                <button type="submit"
+                        class="btn btn-save"
+                        th:if="${reserva.estado != 'COMPLETADA' and reserva.estado != 'CANCELADA'}">
+                    <i class="bi bi-floppy-fill"></i>
+                    Guardar Cambios
+                </button>
+
+                <!--
+                  Botón de cancelar (enlace)
+                  th:href="@{/admin/reservas}" → vuelve al listado sin guardar.
+                -->
+                <a th:href="@{/admin/reservas}"
+                   class="btn btn-cancel">
+                    <i class="bi bi-arrow-left"></i>
+                    Cancelar y Volver
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+<script th:inline="javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const estado = /*[[${reserva.estado}]]*/ 'PENDIENTE';
+    const fechaInicioStr = /*[[${fechaInicioStr}]]*/ '2026-01-01';
+    const fechaFinStr = /*[[${fechaFinStr}]]*/ '2026-01-05';
+    const fechasBloqueadasApi = /*[[${fechasBloqueadas}]]*/ [];
+
+    function parseLocalDate(str) {
+        const parts = str.split('-').map(Number);
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    function formatLocalDate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + d;
+    }
+
+    const fechaInicio = parseLocalDate(fechaInicioStr);
+    const fechaFinOrig = parseLocalDate(fechaFinStr);
+    const precioPorNoche = /*[[${reserva.habitacion.precio}]]*/ 0;
+
+    // Fechas bloqueadas incluyen las de la API + el día de check-in (no se puede check-out el mismo día)
+    const todasBloqueadas = [...fechasBloqueadasApi, fechaInicioStr];
+    const blockedDates = todasBloqueadas.map(f => parseLocalDate(f));
+
+    function esFechaBloqueada(date) {
+        const str = formatLocalDate(date);
+        return todasBloqueadas.includes(str);
+    }
+
+    function configurarDia(dayElem) {
+        const date = dayElem.dateObj;
+        if (!date) return;
+        if (esFechaBloqueada(date)) {
+            dayElem.title = 'No disponible';
+            dayElem.style.textDecoration = 'line-through';
+            dayElem.style.color = '#e76f51';
+            dayElem.style.opacity = '0.6';
+        }
+    }
+
+    let actualizando = false;
+
+    function sumarDia(date) {
+        const d = new Date(date);
+        d.setDate(d.getDate() + 1);
+        return d;
+    }
+
+    // Inicializar Flatpickr para fecha de entrada
+    if (estado !== 'ACTIVA' && estado !== 'COMPLETADA' && estado !== 'CANCELADA') {
+        const inicioPicker = document.getElementById('fechaInicioPicker');
+        if (inicioPicker && !inicioPicker.disabled) {
+            const fpInicio = flatpickr(inicioPicker, {
+                locale: flatpickr.l10ns.es || flatpickr.l10ns.default,
+                dateFormat: 'd/m/Y',
+                minDate: 'today',
+                defaultDate: fechaInicio,
+                disable: blockedDates,
+                onChange: function(selectedDates) {
+                    if (actualizando) return;
+                    actualizando = true;
+                    document.getElementById('fechaInicio').value = formatLocalDate(selectedDates[0]);
+                    const finPicker = document.getElementById('fechaFinPicker');
+                    if (finPicker && finPicker._flatpickr) {
+                        const minD = sumarDia(selectedDates[0]);
+                        finPicker._flatpickr.set('minDate', minD);
+                        if (finPicker._flatpickr.selectedDates.length > 0 &&
+                            finPicker._flatpickr.selectedDates[0] <= selectedDates[0]) {
+                            finPicker._flatpickr.clear();
+                            document.getElementById('fechaFin').value = '';
+                        }
+                    }
+                    actualizando = false;
+                },
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    configurarDia(dayElem);
+                }
+            });
+        }
+    }
+
+    // Inicializar Flatpickr para fecha de salida
+    if (estado !== 'COMPLETADA' && estado !== 'CANCELADA') {
+        const finPicker = document.getElementById('fechaFinPicker');
+        if (finPicker && !finPicker.disabled) {
+            const minDateFin = sumarDia(fechaInicio);
+            const fpFin = flatpickr(finPicker, {
+                locale: flatpickr.l10ns.es || flatpickr.l10ns.default,
+                dateFormat: 'd/m/Y',
+                minDate: minDateFin,
+                defaultDate: fechaFin >= minDateFin ? fechaFin : minDateFin,
+                disable: blockedDates,
+                onChange: function(selectedDates) {
+                    if (actualizando) return;
+                    actualizando = true;
+                    const nuevaFecha = selectedDates[0];
+                    document.getElementById('fechaFin').value = formatLocalDate(nuevaFecha);
+                    // Mostrar advertencia si se extiende la estadía
+                    const warning = document.getElementById('cargoExtraWarning');
+                    if (warning) {
+                        const nochesExtra = Math.round((nuevaFecha - fechaFinOrig) / 86400000);
+                        if (nochesExtra > 0) {
+                            const cargo = (nochesExtra * precioPorNoche).toFixed(2);
+                            document.getElementById('cargoExtraText').textContent =
+                                'Se extiende la estadía ' + nochesExtra + ' noche' + (nochesExtra > 1 ? 's' : '') +
+                                ' — cargo extra de S/ ' + cargo;
+                            warning.classList.remove('d-none');
+                        } else {
+                            warning.classList.add('d-none');
+                        }
+                    }
+                    actualizando = false;
+                },
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    configurarDia(dayElem);
+                }
+            });
+        }
+    }
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

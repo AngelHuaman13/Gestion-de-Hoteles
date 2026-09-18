@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="navbar">
+<nav class="navbar navbar-expand-lg">
+
+    <div class="container">
+
+        <div class="logo">
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center">
+                <img th:src="@{/icons/logo.png}" alt="Logo" height="40" class="me-2">
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav">
+
+                <li class="nav-item"
+                    th:if="${session.usuarioId != null and session.usuarioRol != 'ADMIN'}">
+                    <a class="nav-link" th:href="@{/habitaciones}">
+                        <i class="bi bi-door-open me-1"></i>Habitaciones
+                    </a>
+                </li>
+
+                <li class="nav-item"
+                    th:if="${session.usuarioId != null and session.usuarioRol != 'ADMIN'}">
+                    <a class="nav-link" th:href="@{/mis-reservas}">
+                        <i class="bi bi-calendar-check me-1"></i>Mis Reservas
+                    </a>
+                </li>
+
+                <li class="nav-item"
+                    th:if="${session.usuarioId != null and session.usuarioRol != 'ADMIN'}">
+                    <a class="nav-link" th:href="@{/mi-perfil}">
+                        <i class="bi bi-person-gear me-1"></i>Mi Perfil
+                    </a>
+                </li>
+
+                <li class="nav-item"
+                    th:if="${session.usuarioId != null and session.usuarioRol == 'ADMIN'}">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                    </a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item" th:if="${session.usuarioId == null}">
+                    <a class="nav-link" th:href="@{/login}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
+                    </a>
+                </li>
+
+                <li class="nav-item" th:if="${session.usuarioId == null}">
+                    <a class="nav-link" th:href="@{/registro}">
+                        <i class="bi bi-person-plus me-1"></i>Registrarse
+                    </a>
+                </li>
+
+                <li class="nav-item" th:if="${session.usuarioId != null}">
+                    <span class="nav-user">
+                        <i class="bi bi-person-circle"></i>
+                        <span th:text="${session.usuarioNombre}"></span>
+                    </span>
+                </li>
+
+                <li class="nav-item" th:if="${session.usuarioId != null}">
+                    <a class="nav-link text-danger" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-left me-1"></i>Cerrar Sesión
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="modal fade" id="inactivityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-clock-history me-2"></i>Sesión próxima a expirar
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p>Has estado inactivo por un tiempo. Por seguridad, tu sesión cerrará automáticamente en <strong>30 segundos</strong>.</p>
+                <p class="mb-0 text-muted small">Selecciona "Seguir navegando" para continuar.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="cerrarAdvertencia()">
+                    <i class="bi bi-arrow-repeat me-1"></i>Seguir navegando
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:if="${session.usuarioId != null}" th:src="@{/js/inactivity-logout.js}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname;
+    document.querySelectorAll('#navbarNav .nav-link').forEach(function(link) {
+        var href = link.getAttribute('href') || '';
+        if (href.indexOf('/habitaciones') !== -1 && (path === '/habitaciones' || path.indexOf('/reserva') !== -1)) {
+            link.classList.add('active');
+        }
+        if (href.indexOf('/mis-reservas') !== -1 && path.indexOf('/mis-reservas') !== -1) {
+            link.classList.add('active');
+        }
+        if (href.indexOf('/mi-perfil') !== -1 && path.indexOf('/mi-perfil') !== -1) {
+            link.classList.add('active');
+        }
+        if (href.indexOf('/admin') !== -1 && path.indexOf('/admin') !== -1) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
+</div>
+</body>
+</html>
