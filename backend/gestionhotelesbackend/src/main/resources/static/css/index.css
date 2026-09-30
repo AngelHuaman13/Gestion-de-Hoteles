@@ -1,15 +1,18 @@
 /*
- * VARIABLES GLOBALES DE COLOR
+ * VARIABLES GLOBALES DE COLOR - TEMA OCEÁNICO
  */
 :root {
-    --chalet-brown: #7E6354;
-    --chalet-hover: #614a3e;
-    --chalet-text: #4a4a4a;
-    --bg-body: #ffffff;
-    --bg-header: #664535;
-    --bg-footer: #000000;
+    --sea-deep: #073b4c;
+    --sea-mid: #0a4f66;
+    --sea-accent: #06aed5;
+    --sea-hover: #05769a;
+    --sea-text: #1c3a3f;
+    --bg-body: #f7fbfc;
+    --bg-header: #073b4c;
+    --bg-footer: #052a35;
     --text: #ffffff;
-    --bg-modal: #5c4a41;
+    --bg-modal: #0a4f66;
+    --sand-accent: #f4a261;
 }
 
 /*
@@ -17,7 +20,7 @@
  */
 body {
     font-family: 'Inter', sans-serif;
-    color: var(--chalet-text);
+    color: var(--sea-text);
     background-color: var(--bg-body);
 }
 
@@ -30,7 +33,7 @@ p, h4, h5, h6 {
 }
 
 /*
- * BARRA DE NAVEGACIÓN
+ * BARRA DE NAVEGACIÓN (referencia, el estilo real vive en navbar.css)
  */
 .navbar {
     background-color: var(--bg-header);
@@ -49,7 +52,7 @@ p, h4, h5, h6 {
  * TÍTULO DE SECCIÓN
  */
 .section-title {
-    color: var(--chalet-brown);
+    color: var(--sea-mid);
     font-weight: 300;
     letter-spacing: 2px;
     margin-bottom: 30px;
@@ -57,7 +60,7 @@ p, h4, h5, h6 {
 }
 
 h3, h4 {
-    color: var(--chalet-brown);
+    color: var(--sea-mid);
     font-weight: 300;
     letter-spacing: 2px;
     margin-bottom: 30px;
@@ -65,19 +68,19 @@ h3, h4 {
 }
 
 /*
- * TABLA PERSONALIZADA
+ * TABLA PERSONALIZADA (ej. tabla de productos/precios)
  */
 .table-chalet {
     border-collapse: separate;
     border-spacing: 0;
-    border: 1px solid #eaeaea;
+    border: 1px solid #dceef2;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 15px rgba(7, 59, 76, 0.06);
 }
 
 .table-chalet thead {
-    background-color: var(--chalet-brown);
+    background-color: var(--sea-deep);
     color: #ffffff;
 }
 
@@ -93,21 +96,21 @@ h3, h4 {
 .table-chalet td {
     vertical-align: middle;
     padding: 16px 15px;
-    color: var(--chalet-text);
-    border-bottom: 1px solid #eaeaea;
+    color: var(--sea-text);
+    border-bottom: 1px solid #dceef2;
 }
 
 .table-chalet tbody tr:nth-of-type(odd) {
-    background-color: #fcfcfc;
+    background-color: #f2fafc;
 }
 
 .table-chalet tbody tr:hover {
-    background-color: #f5f0ed;
+    background-color: #e3f4f8;
 }
 
 .room-name {
     font-weight: 600;
-    color: var(--chalet-brown);
+    color: var(--sea-mid);
     font-size: 1.1rem;
 }
 
@@ -115,7 +118,7 @@ h3, h4 {
  * BOTÓN PERSONALIZADO
  */
 .btn-chalet {
-    background-color: var(--chalet-brown);
+    background-color: var(--sea-accent);
     color: var(--text);
     border: none;
     border-radius: 2px;
@@ -128,16 +131,16 @@ h3, h4 {
 }
 
 .btn-chalet:hover {
-    background-color: var(--chalet-hover);
+    background-color: var(--sea-hover);
     color: white;
-    box-shadow: 0 4px 8px rgba(126, 99, 84, 0.3);
+    box-shadow: 0 4px 8px rgba(6, 174, 213, 0.35);
 }
 
 /*
  * MODAL PERSONALIZADO
  */
 .modal-header-chalet {
-    border-bottom: 2px solid var(--chalet-brown);
+    border-bottom: 2px solid var(--sea-accent);
 }
 
 .modal-header-chalet h5 {
@@ -150,13 +153,13 @@ h3, h4 {
 }
 
 .modal-title {
-    color: var(--chalet-brown);
+    color: var(--sea-mid);
     font-weight: 600;
 }
 
 .form-control:focus {
-    border-color: var(--chalet-brown);
-    box-shadow: 0 0 0 0.25rem rgba(126, 99, 84, 0.25);
+    border-color: var(--sea-accent);
+    box-shadow: 0 0 0 0.25rem rgba(6, 174, 213, 0.25);
 }
 
 /*
@@ -182,18 +185,19 @@ h3, h4 {
 .info h4 {
     margin-top: 40px;
     font-size: 22px;
+    color: var(--text);
 }
 
 /*
  * FORMULARIO
  */
 .formulario {
-    background: #f2efed;
+    background: #eef8fa;
 }
 
 .formulario h4 {
     letter-spacing: 2px;
-    color: #8a7f78;
+    color: #4f7a86;
 }
 
 .formulario h1 {
@@ -203,28 +207,28 @@ h3, h4 {
 
 input,
 textarea {
-    background: #e9e6e4 !important;
+    background: #e4f1f4 !important;
     border: none !important;
 }
 
 input:focus,
 textarea:focus {
-    background: #dedad7 !important;
+    background: #d3e9ee !important;
     box-shadow: none !important;
 }
 
 button {
-    background: #5c4a41 !important;
+    background: var(--sea-mid) !important;
     border: none !important;
     transition: 0.3s;
 }
 
 button:hover {
-    background: #4a3b34 !important;
+    background: var(--sea-hover) !important;
 }
 
 .modal-header {
-    background: #5c4a41;
+    background: var(--sea-mid);
     color: white;
 }
 
@@ -232,13 +236,25 @@ button:hover {
  * HERO / BANNER PRINCIPAL
  */
 .contenedorHover {
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/img/heroImage.avif');
+    background: linear-gradient(rgba(7, 30, 40, 0.55), rgba(7, 30, 40, 0.55)), url('/img/peces1.avif');
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
     height: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+}
+
+.contenedorHover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--sea-accent), transparent);
 }
 
 .contenedorTitle {
@@ -250,6 +266,7 @@ button:hover {
     font-size: clamp(1.8rem, 5vw, 4rem);
     color: white;
     margin-left: 0.5rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .contenedorHover p {
@@ -273,5 +290,9 @@ button:hover {
 @media (max-width: 768px) {
     .info {
         text-align: center;
+        color: var(--text);
+    }
+    .contenedorTitle {
+        width: 100%;
     }
 }
