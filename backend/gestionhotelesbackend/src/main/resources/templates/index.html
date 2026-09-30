@@ -16,6 +16,7 @@
 	<!-- Estilos personalizados -->
 	<link th:href="@{/css/navbar.css}" rel="stylesheet">
 	<link th:href="@{/css/index.css}" rel="stylesheet">
+	<link th:href="@{/css/productos.css}" rel="stylesheet">
 
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -320,136 +321,152 @@ aria-hidden="true": accesibilidad (oculto por defecto)
 
 
 <!--
-==== Uso de img-fluid ====
-container : ofrece un ancho adaptable,según el tamaño de la pantalla
+==== SECCIÓN: GRID DE PRODUCTOS ====
+id="productos" : permite llegar a esta sección desde un enlace (#productos)
+container : ofrece un ancho adaptable, según el tamaño de la pantalla
 -->
 
-<div class="container">
+<section id="productos" class="container productos-section my-5">
+
+	<div class="text-center">
+		<h2 class="section-title">Nuestros Productos</h2>
+		<p class="productos-subtitulo">Elige tus favoritos del mar y agrégalos a tu carrito.</p>
+	</div>
 
 	<!--
-    text-center : alinea elementos y textos en el centro
-    mt-3 : equivalente a margint top
-      -->
-	<h3 class="text-center mt-3">Algunos de nuestros productos</h3>
+    row : agrupa las tarjetas en filas
+    g-4 : separación entre tarjetas
+    col-12 / col-sm-6 / col-lg-3 : 1 tarjeta por fila en móvil, 2 en tablet y 4 en escritorio
+    -->
+	<div class="row g-4">
 
+		<!-- Tarjeta: Camarones -->
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="card producto-card h-100">
 
-	<div class="row">
-
-		<!--
-        col : ayuda a definir columnas responsive
-        col-12 : significa que para pantallas con un ancho menor de 576px, ocupara el total del ancho del contenedor padre
-        col-md-12 : significa que para pantallas con un ancho de 768px o más, ocupara el total del ancho del contenedor padre,
-        esto con el fin de que el usuario pueda visualizar mejor la imagen del producto
-        col-lg-6 : significa que para pantallas con un ancho de 992px o más, ocupara la mitad del ancho del contenedor padre
-        -->
-
-
-		<div class="col-12 col-md-12 col-lg-6">
-
-			<!--
-            img-fluid : Adapta de manera automatica el alto de la imagen, asimismo tiene por defecto width 100%
-            mt-5 : equivalente a un margin top
-            -->
-
-			<img th:src = "@{/img/langosta.png}"  class="img-fluid mt-5" alt="...">
-
-
-			<!--
-            d-flex : utiliza flexbox, es lo mismo que display:flex
-            justify-content-between : en el eje principal los "childs" estaran separados en los extremos
-            align-items-center : En el eje secundario los "childs" estaran centrados
-            flex-wrap : Permite que un elemento dentro del contenedor, salte de linea si no hay más espacio
-            -->
-
-			<div class="d-flex justify-content-between align-items-center flex-wrap" >
-
-				<!--
-                d-flex : utiliza flexbox, es lo mismo que display:flex
-                align-items-center : En el eje secundario los "childs" estaran centrados
-                gap-1 : permite la separacion entre los elementos contenidos
-                -->
-
-				<div class="d-flex align-items-center gap-1" >
-
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-					<p class="mb-0 text-nowrap">Ideal para 2</p>
+				<div class="producto-img-wrap">
+					<img th:src="@{/img/camarones.png}" class="card-img-top producto-img" alt="Camarones Jumbo">
+					<span class="producto-badge">Más vendido</span>
 				</div>
 
 				<!--
-                mb-0 : equivalente a margin bottom, no existe margen de separacion solo en la parte inferior
+                d-flex flex-column : permite empujar el botón al fondo de la tarjeta con mt-auto
                 -->
-				<p class="mb-0">s/. 120 c/u</p>
+				<div class="card-body d-flex flex-column">
+					<h5 class="card-title producto-nombre">Camarones Jumbo</h5>
+					<p class="card-text producto-desc">Camarones frescos de Piura, ideales para la plancha o al ajo.</p>
 
-			</div>
+					<div class="d-flex justify-content-between align-items-center mt-auto mb-3">
+						<span class="producto-precio">S/ 65.00</span>
+						<span class="producto-unidad">x kg</span>
+					</div>
 
-			<h4>Langosta Entera</h4>
-
-		</div>
-
-		<div class="col-12 col-md-12 col-lg-6">
-
-			<img th:src = "@{/img/ceviche.png}" class="img-fluid mt-5" alt="...">
-
-			<div class="d-flex justify-content-between align-items-center flex-wrap" >
-
-				<div class="d-flex align-items-center gap-1">
-
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-					<p class="mb-0 text-nowrap">Ideal para 1</p>
+					<!--
+                    data-* : guardan la información del producto que usará carrito.js
+                    -->
+					<button type="button" class="btn btn-agregar w-100"
+							data-id="camarones"
+							data-nombre="Camarones Jumbo"
+							data-precio="65"
+							th:attr="data-img=@{/img/camarones.png}">
+						<i class="bi bi-cart-plus me-1"></i>Agregar al carrito
+					</button>
 				</div>
 
-				<p class="mb-0">s/. 38 c/u</p>
-
 			</div>
-
-			<h4 >Ceviche Mixto</h4>
-
 		</div>
 
-		<div class="col-12 col-md-12 col-lg-6">
+		<!-- Tarjeta: Langosta -->
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="card producto-card h-100">
 
-			<img th:src = "@{/img/camarones.png}" class="img-fluid mt-5" alt="...">
-
-			<div class="d-flex justify-content-between align-items-center flex-wrap" >
-
-				<div class="d-flex align-items-center gap-1" >
-
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-					<p class="mb-0 text-nowrap">Por kilo</p>
+				<div class="producto-img-wrap">
+					<img th:src="@{/img/langosta.png}" class="card-img-top producto-img" alt="Langosta Entera">
+					<span class="producto-badge">Premium</span>
 				</div>
 
-				<p class="mb-0">s/. 65 x kg</p>
+				<div class="card-body d-flex flex-column">
+					<h5 class="card-title producto-nombre">Langosta Entera</h5>
+					<p class="card-text producto-desc">Langosta del Mar de Grau, viva o cocida. Ideal para compartir entre 2.</p>
 
-			</div>
+					<div class="d-flex justify-content-between align-items-center mt-auto mb-3">
+						<span class="producto-precio">S/ 120.00</span>
+						<span class="producto-unidad">c/u</span>
+					</div>
 
-			<h4 >Camarones Jumbo</h4>
-
-		</div>
-
-		<div class="col-12 col-md-12 col-lg-6">
-
-			<img th:src = "@{/img/pulpo.png}" class="img-fluid mt-5" alt="...">
-
-			<div class="d-flex justify-content-between align-items-center flex-wrap" >
-
-				<div class="d-flex align-items-center gap-1" >
-
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-					<p class="mb-0 text-nowrap">Ideal para 1</p>
+					<button type="button" class="btn btn-agregar w-100"
+							data-id="langosta"
+							data-nombre="Langosta Entera"
+							data-precio="120"
+							th:attr="data-img=@{/img/langosta.png}">
+						<i class="bi bi-cart-plus me-1"></i>Agregar al carrito
+					</button>
 				</div>
 
-				<p class="mb-0">s/. 42 c/u</p>
-
 			</div>
-
-			<h4 >Pulpo al Olivo</h4>
-
 		</div>
 
+		<!-- Tarjeta: Pulpo -->
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="card producto-card h-100">
+
+				<div class="producto-img-wrap">
+					<img th:src="@{/img/pulpo.png}" class="card-img-top producto-img" alt="Pulpo al Olivo">
+				</div>
+
+				<div class="card-body d-flex flex-column">
+					<h5 class="card-title producto-nombre">Pulpo al Olivo</h5>
+					<p class="card-text producto-desc">Pulpo tierno en crema de aceituna, preparado al momento.</p>
+
+					<div class="d-flex justify-content-between align-items-center mt-auto mb-3">
+						<span class="producto-precio">S/ 42.00</span>
+						<span class="producto-unidad">c/u</span>
+					</div>
+
+					<button type="button" class="btn btn-agregar w-100"
+							data-id="pulpo"
+							data-nombre="Pulpo al Olivo"
+							data-precio="42"
+							th:attr="data-img=@{/img/pulpo.png}">
+						<i class="bi bi-cart-plus me-1"></i>Agregar al carrito
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Tarjeta: Ceviche -->
+		<div class="col-12 col-sm-6 col-lg-3">
+			<div class="card producto-card h-100">
+
+				<div class="producto-img-wrap">
+					<img th:src="@{/img/ceviche.png}" class="card-img-top producto-img" alt="Ceviche Mixto">
+				</div>
+
+				<div class="card-body d-flex flex-column">
+					<h5 class="card-title producto-nombre">Ceviche Mixto</h5>
+					<p class="card-text producto-desc">Pescado y mariscos del día con limón, ají limo y camote.</p>
+
+					<div class="d-flex justify-content-between align-items-center mt-auto mb-3">
+						<span class="producto-precio">S/ 38.00</span>
+						<span class="producto-unidad">c/u</span>
+					</div>
+
+					<button type="button" class="btn btn-agregar w-100"
+							data-id="ceviche"
+							data-nombre="Ceviche Mixto"
+							data-precio="38"
+							th:attr="data-img=@{/img/ceviche.png}">
+						<i class="bi bi-cart-plus me-1"></i>Agregar al carrito
+					</button>
+				</div>
+
+			</div>
+		</div>
 
 	</div>
 
-</div>
+</section>
 
 
 
