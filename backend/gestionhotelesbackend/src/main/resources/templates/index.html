@@ -659,6 +659,74 @@ tabindex="-1": evita foco automático del modal al cargar
 
 
 
+<!--
+==== CARRITO DE COMPRAS ====
+btn-carrito-flotante : botón fijo en la esquina inferior derecha que abre el carrito
+offcanvas-end : panel lateral de Bootstrap que aparece desde la derecha
+-->
+
+<button type="button" class="btn-carrito-flotante" data-bs-toggle="offcanvas" data-bs-target="#carritoPanel" aria-controls="carritoPanel" aria-label="Abrir carrito">
+	<i class="bi bi-cart3"></i>
+	<span id="carritoContador" class="carrito-contador">0</span>
+</button>
+
+<div class="offcanvas offcanvas-end carrito-panel" tabindex="-1" id="carritoPanel" aria-labelledby="carritoTitulo">
+
+	<div class="offcanvas-header carrito-header">
+		<h5 class="offcanvas-title" id="carritoTitulo">
+			<i class="bi bi-cart3 me-2"></i>Tu carrito
+		</h5>
+		<button type="button" class="carrito-cerrar" data-bs-dismiss="offcanvas" aria-label="Cerrar"><i class="bi bi-x-lg"></i></button>
+	</div>
+
+	<div class="offcanvas-body d-flex flex-column">
+
+		<!-- Mensaje cuando el carrito no tiene productos -->
+		<div id="carritoVacio" class="carrito-vacio text-center">
+			<i class="bi bi-basket"></i>
+			<p class="mb-0">Tu carrito está vacío.</p>
+			<small class="text-muted">Agrega productos para empezar tu pedido.</small>
+		</div>
+
+		<!-- Lista de productos agregados (la llena carrito.js) -->
+		<ul id="carritoItems" class="list-unstyled carrito-items mb-3"></ul>
+
+		<!-- Resumen y acciones -->
+		<div id="carritoResumen" class="carrito-resumen mt-auto">
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<span class="fw-semibold">Total</span>
+				<span id="carritoTotal" class="carrito-total">S/ 0.00</span>
+			</div>
+			<button type="button" id="btnFinalizarPedido" class="btn btn-agregar w-100 mb-2">
+				<i class="bi bi-bag-check me-1"></i>Finalizar pedido
+			</button>
+			<button type="button" id="btnVaciarCarrito" class="btn btn-vaciar w-100">
+				Vaciar carrito
+			</button>
+		</div>
+
+		<!-- Mensaje de pedido confirmado -->
+		<div id="carritoExito" class="carrito-exito text-center">
+			<i class="bi bi-check-circle"></i>
+			<h5>¡Pedido registrado!</h5>
+			<p id="carritoExitoTexto" class="mb-0"></p>
+		</div>
+
+	</div>
+</div>
+
+<!-- Aviso rápido al agregar un producto -->
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+	<div id="carritoToast" class="toast carrito-toast align-items-center border-0" role="status" aria-live="polite" aria-atomic="true">
+		<div class="d-flex">
+			<div class="toast-body">
+				<i class="bi bi-check2-circle me-1"></i><span id="carritoToastTexto">Producto agregado</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <!-- Pie de página -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
@@ -667,5 +735,8 @@ tabindex="-1": evita foco automático del modal al cargar
 
 <!-- Script de validaciones personalizadas -->
 <script th:src="@{/js/scripts.js}"></script>
+
+<!-- Script del carrito de compras -->
+<script th:src="@{/js/carrito.js}"></script>
 </body>
 </html>

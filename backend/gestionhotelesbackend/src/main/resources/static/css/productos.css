@@ -170,8 +170,17 @@
     color: #ffffff;
 }
 
-.carrito-header .btn-close {
-    background-color: transparent !important;
+.carrito-cerrar {
+    margin-left: auto;
+    background: transparent !important;
+    color: #ffffff;
+    font-size: 1.1rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.carrito-cerrar:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
 }
 
 .carrito-vacio {
@@ -272,6 +281,7 @@
 }
 
 .carrito-exito {
+    display: none;
     margin: auto 0;
 }
 
