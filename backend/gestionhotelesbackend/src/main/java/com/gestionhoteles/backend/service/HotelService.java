@@ -47,6 +47,12 @@ public class HotelService {
     }
 
     public List<Hotel> buscarPorCiudad(String ciudad) {
+
         return hotelRepository.findByCiudad(ciudad);
+    }
+
+    // Metodo auxiliar agregado por ashi-games
+    public boolean existeHotel(Integer id) {
+        return hotelRepository.existsById(id);
     }
 }

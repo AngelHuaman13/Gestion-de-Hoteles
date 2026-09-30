@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<!--
+  xmlns:th="http://www.thymeleaf.org"
+  → Habilita todas las directivas Thymeleaf en este HTML.
+    Sin esto, las etiquetas "th:*" no son interpretadas.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas - Lotus Admin</title>
+
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons (CDN) → íconos para el menú, badges y botones -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts → Inter (fuente principal del panel admin) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!--
+      th:href="@{/css/admin-reservas.css}"
+      → Ruta dinámica al CSS específico de la página de reservas.
+        "@{...}" es la sintaxis de Thymeleaf para rutas absolutas.
+    -->
+    <link th:href="@{/css/admin-reservas.css}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ============================================================
+     SIDEBAR (BARRA LATERAL)
+     ============================================================ -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <h2>Royal Sayariy</h2>
+        <span>Panel administrativo</span>
+    </div>
+
+    <!-- Menú de navegación lateral -->
+    <div class="menu">
+
+        <!--
+          th:href="@{/admin/dashboard}" → redirige al Dashboard.
+          class="active" → solo la página actual lleva esta clase.
+        -->
+        <a th:href="@{/admin/dashboard}">
+            <i class="bi bi-grid-fill"></i>
+            Dashboard
+        </a>
+
+        <!--
+          class="active" → marca "Reservas" como la página actual.
+        -->
+        <a th:href="@{/admin/reservas}" class="active">
+            <i class="bi bi-calendar-check-fill"></i>
+            Reservas
+        </a>
+
+        <a th:href="@{/admin/habitaciones}">
+            <i class="bi bi-door-open-fill"></i>
+            Habitaciones
+        </a>
+
+        <a th:href="@{/admin/clientes}">
+            <i class="bi bi-people-fill"></i>
+            Clientes
+        </a>
+
+        <a th:href="@{/admin/flujo-caja}">
+            <i class="bi bi-cash-stack"></i>
+            Flujo de Caja
+        </a>
+
+    </div>
+
+    <!--
+      th:href="@{/logout}" → endpoint del AuthController que
+        invalida la sesión y redirige al inicio.
+    -->
+    <div class="logout">
+        <a th:href="@{/logout}">
+            <i class="bi bi-box-arrow-left"></i>
+            Cerrar Sesión
+        </a>
+    </div>
+
+</aside>
+
+<!-- ============================================================
+     CONTENIDO PRINCIPAL
+     ============================================================ -->
+<main class="main-content">
+
+    <!--
+      HERO (BANNER SUPERIOR)
+    -->
+    <section class="hero-section">
+        <div class="hero-content d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="hero-title">Reservas</h1>
+                <p class="hero-subtitle">Administra todas las reservas del hotel.</p>
+            </div>
+            <a th:href="@{/admin/reserva/nuevo}" class="btn-dashboard">
+                <i class="bi bi-plus-circle-fill"></i> Nueva Reserva
+            </a>
+        </div>
+    </section>
+
+    <!-- Mensajes flash -->
+    <div class="px-3 mb-3" th:if="${success}">
+        <div class="alert alert-success alert-dismissible fade show mb-0" style="border-radius:12px;">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${success}">Éxito</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <div class="px-3 mb-3" th:if="${error}">
+        <div class="alert alert-danger alert-dismissible fade show mb-0" style="border-radius:12px;">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${error}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+
+    <!--
+      EMPTY STATE (ESTADO VACÍO)
+      th:if="${#lists.isEmpty(reservas)}"
+      → Se muestra solo cuando la lista "reservas" está vacía.
+        "#lists.isEmpty(...)" es un utility object de Thymeleaf.
+    -->
+    <div class="empty-state"
+         th:if="${#lists.isEmpty(reservas)}">
+
+        <i class="bi bi-calendar-x-fill"></i>
+        <h3>No existen reservas registradas</h3>
+        <p>El sistema aún no tiene reservas almacenadas.</p>
+    </div>
+
+    <div class="row g-2 mb-2 px-3">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold small text-muted">Filtrar por fecha de ingreso</label>
+            <input type="date" id="filtroInicio" class="form-control"
+                   onchange="filtrarTabla()">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold small text-muted">Filtrar por fecha de salida</label>
+            <input type="date" id="filtroFin" class="form-control"
+                   onchange="filtrarTabla()">
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <button class="btn btn-outline-secondary w-100" onclick="limpiarFiltros()"
+                    title="Limpiar filtros de fecha">
+                <i class="bi bi-eraser"></i>
+            </button>
+        </div>
+        <div class="col-md-5 d-flex align-items-end">
+            <input type="text" id="buscarInput" class="form-control"
+                   placeholder="Buscar reserva (ID, usuario, habitación)..."
+                   onkeyup="filtrarTabla()">
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3 px-3">
+        <span class="small text-muted fw-semibold me-1 align-self-center">Estado:</span>
+        <button class="btn btn-sm btn-filtro-estado active"
+                data-estado="" onclick="filtrarPorEstado(this)">
+            Todos
+        </button>
+        <button class="btn btn-sm btn-filtro-estado"
+                data-estado="ACTIVA" onclick="filtrarPorEstado(this)">
+            <span class="status-dot" style="background:#15803d;"></span> Activa
+        </button>
+        <button class="btn btn-sm btn-filtro-estado"
+                data-estado="PENDIENTE" onclick="filtrarPorEstado(this)">
+            <span class="status-dot" style="background:#b45309;"></span> Pendiente
+        </button>
+        <button class="btn btn-sm btn-filtro-estado"
+                data-estado="COMPLETADA" onclick="filtrarPorEstado(this)">
+            <span class="status-dot" style="background:#4b5563;"></span> Completada
+        </button>
+        <button class="btn btn-sm btn-filtro-estado"
+                data-estado="CANCELADA" onclick="filtrarPorEstado(this)">
+            <span class="status-dot" style="background:#b91c1c;"></span> Cancelada
+        </button>
+    </div>
+
+    <!--
+      TABLA DE RESERVAS
+      th:if="${not #lists.isEmpty(reservas)}"
+      → La tabla solo se renderiza si hay reservas en la lista.
+    -->
+    <div class="table-container"
+         th:if="${not #lists.isEmpty(reservas)}">
+
+        <div class="table-responsive">
+
+            <table class="table custom-table align-middle">
+
+                <!-- Encabezados de la tabla (estáticos) -->
+                <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Hab. ID</th>
+                    <th class="text-center">Usuario</th>
+                    <th class="text-center">Habitaci&oacute;n</th>
+                    <th class="text-center">Fecha de ingreso</th>
+                    <th class="text-center">Fecha de salida</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <!--
+                  th:each="reserva : ${reservas}"
+                  → Itera sobre la lista "reservas" enviada desde
+                    AdminController.reservas(). Por cada elemento crea
+                    una variable "reserva" y genera una fila <tr>.
+                -->
+                <tr th:each="reserva : ${reservas}" th:data-estado="${reserva.estado}">
+
+                    <td class="text-center">
+                        <span class="fw-bold text-secondary"
+                              th:text="'#' + ${reserva.id}">
+                            #1
+                        </span>
+                    </td>
+
+                    <td class="text-center">
+                        <span class="fw-bold"
+                              th:text="${reserva.habitacion.id}"
+                              style="color:var(--chalet-brown);">
+                            3
+                        </span>
+                    </td>
+
+                    <td class="text-center">
+                        <div class="user-box justify-content-center">
+                            <div class="avatar">
+                                <span th:text="${#strings.substring(reserva.usuario.nombre, 0, 1)}">
+                                    A
+                                </span>
+                            </div>
+                            <div>
+                                <div class="user-name"
+                                     th:text="${reserva.usuario.nombre}">
+                                    Usuario
+                                </div>
+                                <small class="text-muted">Cliente registrado</small>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="text-center">
+                        <span class="room-type"
+                              th:text="${reserva.habitacion.tipo}">
+                            Suite
+                        </span>
+                    </td>
+
+                    <!--
+                      FECHAS (formato dd/MM/yyyy):
+                      Se almacena el valor ISO (yyyy-MM-dd) en data-inicio / data-fin
+                      para comparación en el filtro JS, y se muestra formateado al usuario.
+                    -->
+                    <td class="text-center" th:data-inicio="${reserva.fechaInicio}"
+                        th:text="${#temporals.format(reserva.fechaInicio, 'dd/MM/yyyy')}">
+                        01/01/2026
+                    </td>
+                    <td class="text-center" th:data-fin="${reserva.fechaFin}"
+                        th:text="${#temporals.format(reserva.fechaFin, 'dd/MM/yyyy')}">
+                        05/01/2026
+                    </td>
+
+                    <td class="text-center">
+
+                        <span class="status status-active"
+                              th:if="${reserva.estado == 'ACTIVA'}">
+                            ACTIVA
+                        </span>
+
+                        <span class="status status-pending"
+                              th:if="${reserva.estado == 'PENDIENTE'}">
+                            PENDIENTE
+                        </span>
+
+                        <span class="status status-cancel"
+                              th:if="${reserva.estado == 'CANCELADA'}">
+                            CANCELADA
+                        </span>
+
+                        <span class="status status-complete"
+                              th:if="${reserva.estado == 'COMPLETADA'}">
+                            COMPLETADA
+                        </span>
+
+                        <span th:if="${reserva.pagoEstado == 'PAGO_PARCIAL'}"
+                              class="status"
+                              style="background:rgba(245,158,11,0.12)!important;color:#b45309!important;font-size:0.7rem;display:inline-block;margin-top:4px;">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>PAGO PARCIAL
+                        </span>
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <div class="action-buttons">
+
+                            <!--
+                              EDITAR:
+                              th:href="@{/admin/reserva/editar/{id}(id=${reserva.id})}"
+                              → Genera una URL como "/admin/reserva/editar/5".
+                                {id} es una variable de ruta que se sustituye
+                                por ${reserva.id}. El controlador lo recibe
+                                con @PathVariable.
+                            -->
+                            <a th:href="@{/admin/reserva/editar/{id}(id=${reserva.id})}"
+                               class="btn-action btn-edit">
+                                <i class="bi bi-pencil-square"></i>
+                                Editar
+                            </a>
+
+                            <!--
+                              INFO (solo PENDIENTE):
+                              Muestra un modal indicando que el cliente
+                              tiene 2h para pagar en el hotel.
+                            -->
+                            <button type="button"
+                                    class="btn-action btn-info"
+                                    th:if="${reserva.estado == 'PENDIENTE'}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#pendienteModal"
+                                    th:data-cliente="${reserva.usuario.nombre}"
+                                    th:data-habitacion="${reserva.habitacion.tipo}"
+                                    th:data-total="${reserva.totalPrecio}"
+                                    th:data-creacion="${reserva.pagoFecha}">
+                                <i class="bi bi-clock-fill"></i>
+                            </button>
+
+                            <!--
+                              PAGAR (solo PENDIENTE):
+                              Marca la reserva como pagada y cambia su estado a ACTIVA.
+                            -->
+                            <button type="button"
+                                    class="btn-action btn-pay"
+                                    th:if="${reserva.estado == 'PENDIENTE'}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#pagarModal"
+                                    th:data-url="@{/admin/reserva/pagar/{id}(id=${reserva.id})}">
+                                <i class="bi bi-cash-stack me-1"></i>Realizar pago
+                            </button>
+
+                            <!--
+                              COBRAR EXTRA (solo PAGO_PARCIAL):
+                              Registra el pago por noches extra.
+                            -->
+                            <button type="button"
+                                    class="btn-action"
+                                    th:if="${reserva.pagoEstado == 'PAGO_PARCIAL'}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#pagarExtraModal"
+                                    th:data-url="@{/admin/reserva/pagar-extra/{id}(id=${reserva.id})}"
+                                    th:data-cargo="${reserva.cargoExtra}"
+                                    th:data-concepto="${reserva.conceptoCargo}"
+                                    style="background:rgba(245,158,11,0.12)!important;color:#b45309!important;border:none!important;border-radius:999px!important;padding:6px 14px!important;font-size:0.8rem!important;font-weight:600!important;">
+                                <i class="bi bi-cash-coin me-1"></i>Cobrar extra
+                            </button>
+
+                            <!--
+                              ELIMINAR:
+                              Abre un modal de confirmación en lugar de alert nativo.
+                              Se pasa la URL de eliminación en data-url.
+                            -->
+                            <button type="button"
+                                    class="btn-action btn-delete"
+                                    th:classappend="${not reservasEliminables.contains(reserva.id)} ? disabled : ''"
+                                    th:aria-disabled="${not reservasEliminables.contains(reserva.id)}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    th:data-url="@{/admin/reserva/eliminar/{id}(id=${reserva.id})}"
+                                    th:data-estado="${reserva.estado}"
+                                    th:data-bloqueado="${not reservasEliminables.contains(reserva.id)}"
+                                    th:title="${not reservasEliminables.contains(reserva.id)} ? 'Solo se pueden eliminar reservas canceladas' : 'Eliminar reserva'">
+                                <i class="bi bi-trash-fill"></i>
+                                Eliminar
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Paginación (JS) -->
+    <div class="d-flex justify-content-between align-items-center mt-4 px-3" id="paginacion">
+        <div class="text-muted small">
+            Página <span id="pagActual">1</span> de <span id="pagTotal">1</span>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" id="btnAnterior"
+                    class="btn btn-sm btn-outline-secondary"
+                    style="border-radius:999px;padding:6px 16px;font-weight:600;"
+                    onclick="cambiarPagina(-1)">
+                <i class="bi bi-chevron-left"></i> Anterior
+            </button>
+            <button type="button" id="btnSiguiente"
+                    class="btn btn-sm btn-outline-secondary"
+                    style="border-radius:999px;padding:6px 16px;font-weight:600;"
+                    onclick="cambiarPagina(1)">
+                Siguiente <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+</main>
+
+<!-- ============================================================
+     MODAL DE CONFIRMACIÓN PARA ELIMINAR RESERVA
+     ============================================================ -->
+<div class="modal fade" id="pendienteModal" tabindex="-1"
+     aria-labelledby="pendienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none;">
+            <div class="modal-header border-0 pb-0" style="background:rgba(245,158,11,0.08); border-radius:16px 16px 0 0;">
+                <h5 class="modal-title fw-bold" id="pendienteModalLabel" style="color:#b45309;">
+                    <i class="bi bi-clock-history me-2"></i>Pago pendiente en hotel
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <p class="mb-2">
+                    <strong>Cliente:</strong> <span id="pendCliente">—</span>
+                </p>
+                <p class="mb-2">
+                    <strong>Habitación:</strong> <span id="pendHabitacion">—</span>
+                </p>
+                <p class="mb-2">
+                    <strong>Total:</strong> S/ <span id="pendTotal">0.00</span>
+                </p>
+                <p class="mb-2">
+                    <strong>Hora de creación:</strong> <span id="pendCreacion">—</span>
+                </p>
+                <hr>
+                <div class="alert alert-warning mb-0 d-flex align-items-center gap-2" style="border-radius:12px;">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <div>
+                        El cliente tiene <strong>2 horas</strong> para acercarse al hotel y realizar el pago.<br>
+                        <small class="text-muted">Transcurrido ese tiempo, la reserva puede ser cancelada automáticamente.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="border-radius:999px; padding:8px 24px;">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL DE CONFIRMACIÓN PARA PAGAR RESERVA PENDIENTE
+     ============================================================ -->
+<div class="modal fade" id="pagarModal" tabindex="-1"
+     aria-labelledby="pagarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="pagarModalLabel" style="color:var(--chalet-brown);">
+                    <i class="bi bi-cash-stack me-2" style="color:#15803d;"></i>
+                    Confirmar pago
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">
+                    ¿Está seguro de marcar esta reserva como <strong>pagada</strong>?<br>
+                    <span class="text-muted small">La reserva pasará de estado <strong>PENDIENTE</strong> a <strong>ACTIVA</strong>.</span>
+                </p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="border-radius:999px; padding:8px 24px;">
+                    Cancelar
+                </button>
+                <a id="confirmPagarBtn" href="#"
+                   class="btn btn-success"
+                   style="border-radius:999px; padding:8px 24px;">
+                    <i class="bi bi-check-circle me-1"></i>Realizar pago
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL DE CONFIRMACIÓN PARA COBRAR EXTRA
+     ============================================================ -->
+<div class="modal fade" id="pagarExtraModal" tabindex="-1"
+     aria-labelledby="pagarExtraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none;">
+            <div class="modal-header border-0 pb-0" style="background:rgba(245,158,11,0.08); border-radius:16px 16px 0 0;">
+                <h5 class="modal-title fw-bold" id="pagarExtraModalLabel" style="color:#b45309;">
+                    <i class="bi bi-cash-coin me-2"></i>Cobrar noches extra
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <p class="mb-1"><strong>Concepto:</strong> <span id="extraConcepto">—</span></p>
+                <p class="mb-0"><strong>Monto a cobrar:</strong> S/ <span id="extraMonto">0.00</span></p>
+                <hr>
+                <div class="alert alert-warning mb-0 d-flex align-items-center gap-2" style="border-radius:12px;">
+                    <i class="bi bi-info-circle-fill fs-5"></i>
+                    <div>Al confirmar, se registrará el pago de las noches extra y el estado de pago pasará a <strong>APROBADO</strong>.</div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="border-radius:999px; padding:8px 24px;">Cancelar</button>
+                <a id="confirmPagarExtraBtn" href="#"
+                   class="btn btn-warning text-white fw-bold"
+                   style="border-radius:999px; padding:8px 24px;">
+                    <i class="bi bi-check-circle me-1"></i>Confirmar cobro
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL DE CONFIRMACIÓN PARA ELIMINAR RESERVA
+     ============================================================ -->
+<div class="modal fade" id="deleteModal" tabindex="-1"
+     aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel" style="color:var(--chalet-brown);">
+                    <i class="bi bi-exclamation-triangle-fill me-2" style="color:#b91c1c;"></i>
+                    <span id="deleteModalTitle">Confirmar eliminación</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deleteMensaje">
+                    <p class="mb-0">
+                        ¿Está seguro de eliminar esta reserva?<br>
+                        <span class="text-muted small">Esta acción no se puede deshacer.</span>
+                    </p>
+                </div>
+                <div id="deleteBloqueado" class="alert alert-warning d-flex align-items-center gap-2 mb-0" style="border-radius:12px;display:none;">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <span>Solo se pueden eliminar reservas en estado <strong>CANCELADA</strong>.</span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="border-radius:999px; padding:8px 24px;">
+                    Cerrar
+                </button>
+                <a id="confirmDeleteBtn" href="#"
+                   class="btn btn-danger"
+                   style="border-radius:999px; padding:8px 24px;">
+                    <i class="bi bi-trash-fill me-1"></i>Eliminar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-filtro-estado {
+        border-radius: 999px;
+        border: 1px solid #d1d5db;
+        background: white;
+        color: #374151;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 6px 18px;
+        transition: all 0.15s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-filtro-estado:hover {
+        border-color: var(--chalet-brown);
+        color: var(--chalet-brown);
+    }
+    .btn-filtro-estado.active {
+        background: var(--chalet-brown);
+        border-color: var(--chalet-brown);
+        color: white;
+    }
+    .btn-filtro-estado.active .status-dot {
+        background: white !important;
+    }
+    .status-dot {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        vertical-align: middle;
+    }
+
+    .btn-info {
+        background: rgba(245,158,11,0.12) !important;
+        color: #b45309 !important;
+        border: none !important;
+        border-radius: 999px !important;
+        padding: 6px 14px !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s !important;
+    }
+    .btn-info:hover {
+        background: rgba(245,158,11,0.25) !important;
+        transform: scale(1.05);
+    }
+
+    .btn-delete.disabled,
+    .btn-delete[aria-disabled="true"] {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+        background: rgba(107, 114, 128, 0.15) !important;
+        color: #6b7280 !important;
+        pointer-events: auto;
+    }
+    .btn-delete.disabled:hover,
+    .btn-delete[aria-disabled="true"]:hover {
+        transform: none !important;
+        background: rgba(107, 114, 128, 0.15) !important;
+        color: #6b7280 !important;
+    }
+</style>
+
+<script>
+let estadoActual = '';
+let paginaActual = 0;
+const TAMANO_PAGINA = 5;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const url = button.getAttribute('data-url');
+            const bloqueado = button.getAttribute('data-bloqueado') === 'true';
+
+            document.getElementById('deleteMensaje').style.display = bloqueado ? 'none' : '';
+            document.getElementById('deleteBloqueado').style.display = bloqueado ? 'flex' : 'none';
+
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            if (bloqueado) {
+                confirmBtn.style.display = 'none';
+            } else {
+                confirmBtn.style.display = 'inline-flex';
+                confirmBtn.href = url;
+            }
+        });
+    }
+
+    const pagarModal = document.getElementById('pagarModal');
+    if (pagarModal) {
+        pagarModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const url = button.getAttribute('data-url');
+            document.getElementById('confirmPagarBtn').href = url;
+        });
+    }
+
+    const pagarExtraModal = document.getElementById('pagarExtraModal');
+    if (pagarExtraModal) {
+        pagarExtraModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            document.getElementById('confirmPagarExtraBtn').href = button.getAttribute('data-url');
+            document.getElementById('extraConcepto').textContent = button.getAttribute('data-concepto') || '—';
+            const monto = parseFloat(button.getAttribute('data-cargo') || 0);
+            document.getElementById('extraMonto').textContent = monto.toFixed(2);
+        });
+    }
+
+    const pendienteModal = document.getElementById('pendienteModal');
+    if (pendienteModal) {
+        pendienteModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            document.getElementById('pendCliente').textContent = button.getAttribute('data-cliente');
+            document.getElementById('pendHabitacion').textContent = button.getAttribute('data-habitacion');
+            const total = parseFloat(button.getAttribute('data-total') || 0);
+            document.getElementById('pendTotal').textContent = total.toFixed(2);
+            const creacion = button.getAttribute('data-creacion');
+            if (creacion) {
+                const d = new Date(creacion);
+                document.getElementById('pendCreacion').textContent =
+                    d.toLocaleString('es-PE', { hour12: false });
+            } else {
+                document.getElementById('pendCreacion').textContent = '—';
+            }
+        });
+    }
+
+    document.querySelectorAll('.table-container tbody tr').forEach(f => f.dataset.filtro = 'visible');
+    aplicarPaginacion();
+});
+
+function obtenerFilasVisibles() {
+    return Array.from(document.querySelectorAll('.table-container tbody tr'))
+        .filter(f => f.dataset.filtro === 'visible');
+}
+
+function aplicarPaginacion() {
+    document.querySelectorAll('.table-container tbody tr').forEach(f => f.style.display = 'none');
+
+    const visibles = obtenerFilasVisibles();
+    const totalPaginas = Math.max(1, Math.ceil(visibles.length / TAMANO_PAGINA));
+
+    if (paginaActual >= totalPaginas) {
+        paginaActual = Math.max(0, totalPaginas - 1);
+    }
+
+    const inicio = paginaActual * TAMANO_PAGINA;
+    const fin = Math.min(inicio + TAMANO_PAGINA, visibles.length);
+    for (let i = inicio; i < fin; i++) {
+        visibles[i].style.display = '';
+    }
+
+    document.getElementById('pagActual').textContent = totalPaginas > 0 ? paginaActual + 1 : 0;
+    document.getElementById('pagTotal').textContent = totalPaginas;
+
+    document.getElementById('btnAnterior').disabled = paginaActual <= 0;
+    document.getElementById('btnAnterior').classList.toggle('disabled', paginaActual <= 0);
+
+    document.getElementById('btnSiguiente').disabled = paginaActual >= totalPaginas - 1;
+    document.getElementById('btnSiguiente').classList.toggle('disabled', paginaActual >= totalPaginas - 1);
+
+    const pagDiv = document.getElementById('paginacion');
+    pagDiv.style.display = visibles.length > TAMANO_PAGINA ? 'flex' : 'none';
+}
+
+function cambiarPagina(dir) {
+    const visibles = obtenerFilasVisibles();
+    const totalPaginas = Math.max(1, Math.ceil(visibles.length / TAMANO_PAGINA));
+    const nueva = paginaActual + dir;
+    if (nueva >= 0 && nueva < totalPaginas) {
+        paginaActual = nueva;
+        aplicarPaginacion();
+    }
+}
+
+function filtrarTabla() {
+    const texto = document.getElementById('buscarInput').value.toLowerCase();
+    const filtroInicio = document.getElementById('filtroInicio').value;
+    const filtroFin = document.getElementById('filtroFin').value;
+
+    document.querySelectorAll('.table-container tbody tr').forEach(fila => {
+        const coincideTexto = fila.textContent.toLowerCase().includes(texto);
+
+        let coincideFechas = true;
+        if (filtroInicio) {
+            const fechaInicio = fila.querySelector('[data-inicio]')?.dataset.inicio;
+            coincideFechas = coincideFechas && fechaInicio && fechaInicio >= filtroInicio;
+        }
+        if (filtroFin) {
+            const fechaFin = fila.querySelector('[data-fin]')?.dataset.fin;
+            coincideFechas = coincideFechas && fechaFin && fechaFin <= filtroFin;
+        }
+
+        const coincideEstado = !estadoActual || fila.dataset.estado === estadoActual;
+
+        fila.dataset.filtro = (coincideTexto && coincideFechas && coincideEstado) ? 'visible' : '';
+    });
+
+    paginaActual = 0;
+    aplicarPaginacion();
+}
+
+function filtrarPorEstado(btn) {
+    document.querySelectorAll('.btn-filtro-estado').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    estadoActual = btn.dataset.estado;
+    filtrarTabla();
+}
+
+function limpiarFiltros() {
+    document.getElementById('filtroInicio').value = '';
+    document.getElementById('filtroFin').value = '';
+    filtrarTabla();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

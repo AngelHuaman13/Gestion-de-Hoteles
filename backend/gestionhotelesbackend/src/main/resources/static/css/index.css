@@ -1,0 +1,298 @@
+/*
+ * VARIABLES GLOBALES DE COLOR - TEMA OCEÁNICO
+ */
+:root {
+    --sea-deep: #073b4c;
+    --sea-mid: #0a4f66;
+    --sea-accent: #06aed5;
+    --sea-hover: #05769a;
+    --sea-text: #1c3a3f;
+    --bg-body: #f7fbfc;
+    --bg-header: #073b4c;
+    --bg-footer: #052a35;
+    --text: #ffffff;
+    --bg-modal: #0a4f66;
+    --sand-accent: #f4a261;
+}
+
+/*
+ * ESTILOS DEL CUERPO
+ */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--sea-text);
+    background-color: var(--bg-body);
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+p, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+}
+
+/*
+ * BARRA DE NAVEGACIÓN (referencia, el estilo real vive en navbar.css)
+ */
+.navbar {
+    background-color: var(--bg-header);
+}
+
+.nav-item a {
+    color: var(--text);
+}
+
+.logo img {
+    width: clamp(100px, 20vw, 180px);
+    height: auto;
+}
+
+/*
+ * TÍTULO DE SECCIÓN
+ */
+.section-title {
+    color: var(--sea-mid);
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+h3, h4 {
+    color: var(--sea-mid);
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+/*
+ * TABLA PERSONALIZADA (ej. tabla de productos/precios)
+ */
+.table-chalet {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #dceef2;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(7, 59, 76, 0.06);
+}
+
+.table-chalet thead {
+    background-color: var(--sea-deep);
+    color: #ffffff;
+}
+
+.table-chalet th {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 18px 15px;
+    border: none;
+}
+
+.table-chalet td {
+    vertical-align: middle;
+    padding: 16px 15px;
+    color: var(--sea-text);
+    border-bottom: 1px solid #dceef2;
+}
+
+.table-chalet tbody tr:nth-of-type(odd) {
+    background-color: #f2fafc;
+}
+
+.table-chalet tbody tr:hover {
+    background-color: #e3f4f8;
+}
+
+.room-name {
+    font-weight: 600;
+    color: var(--sea-mid);
+    font-size: 1.1rem;
+}
+
+/*
+ * BOTÓN PERSONALIZADO
+ */
+.btn-chalet {
+    background-color: var(--sea-accent);
+    color: var(--text);
+    border: none;
+    border-radius: 2px;
+    padding: 10px 24px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-chalet:hover {
+    background-color: var(--sea-hover);
+    color: white;
+    box-shadow: 0 4px 8px rgba(6, 174, 213, 0.35);
+}
+
+/*
+ * MODAL PERSONALIZADO
+ */
+.modal-header-chalet {
+    border-bottom: 2px solid var(--sea-accent);
+}
+
+.modal-header-chalet h5 {
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+}
+
+.modal-header-chalet button {
+    color: var(--text);
+}
+
+.modal-title {
+    color: var(--sea-mid);
+    font-weight: 600;
+}
+
+.form-control:focus {
+    border-color: var(--sea-accent);
+    box-shadow: 0 0 0 0.25rem rgba(6, 174, 213, 0.25);
+}
+
+/*
+ * SECCIÓN DE INFORMACIÓN
+ */
+.info {
+    background: var(--bg-modal);
+    color: var(--text);
+    min-height: 100%;
+}
+
+.info h2 {
+    font-size: 35px;
+    letter-spacing: 2px;
+}
+
+.titulo {
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 25px;
+}
+
+.info h4 {
+    margin-top: 40px;
+    font-size: 22px;
+    color: var(--text);
+}
+
+/*
+ * FORMULARIO
+ */
+.formulario {
+    background: #eef8fa;
+}
+
+.formulario h4 {
+    letter-spacing: 2px;
+    color: #4f7a86;
+}
+
+.formulario h1 {
+    color: var(--bg-modal);
+    font-weight: bold;
+}
+
+input,
+textarea {
+    background: #e4f1f4 !important;
+    border: none !important;
+}
+
+input:focus,
+textarea:focus {
+    background: #d3e9ee !important;
+    box-shadow: none !important;
+}
+
+button {
+    background: var(--sea-mid) !important;
+    border: none !important;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: var(--sea-hover) !important;
+}
+
+.modal-header {
+    background: var(--sea-mid);
+    color: white;
+}
+
+/*
+ * HERO / BANNER PRINCIPAL
+ */
+.contenedorHover {
+    background: linear-gradient(rgba(7, 30, 40, 0.55), rgba(7, 30, 40, 0.55)), url('/img/peces1.avif');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.contenedorHover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--sea-accent), transparent);
+}
+
+.contenedorTitle {
+    width: 50%;
+    display: flex;
+}
+
+.contenedorTitle h1 {
+    font-size: clamp(1.8rem, 5vw, 4rem);
+    color: white;
+    margin-left: 0.5rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.contenedorHover p {
+    color: white;
+    margin-left: 0.5rem;
+}
+
+/*
+ * PIE DE PÁGINA
+ */
+.footer {
+    background-color: var(--bg-footer);
+    margin: 0rem 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/*
+ * RESPONSIVE
+ */
+@media (max-width: 768px) {
+    .info {
+        text-align: center;
+        color: var(--text);
+    }
+    .contenedorTitle {
+        width: 100%;
+    }
+}

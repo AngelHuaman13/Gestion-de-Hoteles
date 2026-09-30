@@ -18,6 +18,70 @@ public class Habitacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idHabitacion;
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public Integer getIdHabitacion() {
+        return idHabitacion;
+    }
+
+    public void setIdHabitacion(Integer idHabitacion) {
+        this.idHabitacion = idHabitacion;
+    }
+
+    public String getNumeroHabitacion() {
+        return numeroHabitacion;
+    }
+
+    public void setNumeroHabitacion(String numeroHabitacion) {
+        this.numeroHabitacion = numeroHabitacion;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public BigDecimal getPrecioNoche() {
+        return precioNoche;
+    }
+
+    public void setPrecioNoche(BigDecimal precioNoche) {
+        this.precioNoche = precioNoche;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Integer getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(Integer capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
     @ManyToOne
     @JoinColumn(name = "id_hotel", nullable = false)
     private Hotel hotel;
